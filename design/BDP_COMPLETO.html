@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BDP — Plataforma Crediticia Pyme & Banca Empresa</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─────────────────────────────────────────────── */
+:root{
+  --blue-900:#0B2D5E;
+  --blue-800:#0E3A78;
+  --blue-700:#1050A8;
+  --blue-600:#1A62CC;
+  --blue-500:#2273E0;
+  --blue-100:#E8F0FB;
+  --blue-50:#F3F7FE;
+  --orange:#E07820;
+  --orange-light:#FFF3E6;
+  --white:#FFFFFF;
+  --gray-50:#F8FAFC;
+  --gray-100:#F1F5F9;
+  --gray-200:#E2E8F0;
+  --gray-300:#CBD5E1;
+  --gray-400:#94A3B8;
+  --gray-500:#64748B;
+  --gray-600:#475569;
+  --gray-700:#334155;
+  --gray-800:#1E293B;
+  --green:#16A34A;
+  --green-light:#DCFCE7;
+  --red:#DC2626;
+  --red-light:#FEE2E2;
+  --yellow:#D97706;
+  --yellow-light:#FEF3C7;
+  --text:#1E293B;
+  --text-muted:#64748B;
+  --border:#E2E8F0;
+  --radius:10px;
+  --radius-sm:6px;
+  --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:0 4px 16px rgba(0,0,0,.1);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.12);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--gray-50);color:var(--text);font-size:14px;line-height:1.5;}
+a{text-decoration:none;color:inherit;}
+img{display:block;}
+
+/* ─── SCROLLBAR ──────────────────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--gray-300);border-radius:3px;}
+
+/* ─── LOGIN ──────────────────────────────────────────────── */
+#screen-login{
+  position:fixed;inset:0;z-index:999;
+  display:flex;align-items:stretch;
+  background:var(--white);
+}
+.login-left{
+  flex:1;
+  background:linear-gradient(160deg,var(--blue-900) 0%,var(--blue-700) 60%,var(--blue-600) 100%);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:52px;position:relative;overflow:hidden;
+}
+.login-left-bg{
+  position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Ccircle cx='300' cy='300' r='280' fill='none' stroke='rgba(255,255,255,.05)' stroke-width='60'/%3E%3Ccircle cx='300' cy='300' r='180' fill='none' stroke='rgba(255,255,255,.04)' stroke-width='40'/%3E%3C/svg%3E") center/cover;
+  opacity:.5;
+}
+.login-left-content{position:relative;z-index:1;}
+.login-left .badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+  color:#fff;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1.5px;
+  padding:6px 14px;border-radius:20px;margin-bottom:20px;
+}
+.login-left h1{
+  font-size:38px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:16px;
+}
+.login-left h1 span{color:var(--orange);display:block;}
+.login-left p{color:rgba(255,255,255,.65);font-size:15px;max-width:380px;line-height:1.7;}
+.login-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px;}
+.login-pill{
+  background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.8);font-size:11px;padding:5px 12px;border-radius:20px;
+}
+.login-right{
+  width:480px;display:flex;align-items:center;justify-content:center;padding:52px 48px;
+  background:var(--white);
+}
+.login-form-wrap{width:100%;}
+.login-logo{display:flex;align-items:center;gap:12px;margin-bottom:40px;}
+.login-logo-icon{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,var(--blue-800),var(--blue-600));
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:800;color:#fff;letter-spacing:-1px;
+}
+.login-logo-text .brand{font-size:17px;font-weight:800;color:var(--blue-900);}
+.login-logo-text .sub{font-size:11px;color:var(--text-muted);letter-spacing:.5px;}
+.login-form-wrap h2{font-size:24px;font-weight:800;color:var(--blue-900);margin-bottom:6px;}
+.login-form-wrap .tagline{font-size:13px;color:var(--text-muted);margin-bottom:36px;}
+
+.field-group{margin-bottom:20px;}
+.field-label{display:block;font-size:12px;font-weight:600;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;}
+.field-input{
+  width:100%;padding:12px 16px;
+  border:1.5px solid var(--border);border-radius:var(--radius);
+  font-family:inherit;font-size:14px;color:var(--text);
+  background:var(--white);outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.field-input:focus{border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(34,115,224,.12);}
+.field-input.err{border-color:var(--red);}
+.input-wrap{position:relative;}
+.pw-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--gray-400);font-size:16px;line-height:1;}
+
+.error-banner{
+  background:var(--red-light);border:1px solid #FECACA;border-radius:var(--radius-sm);
+  color:var(--red);font-size:13px;padding:10px 14px;margin-bottom:16px;
+  display:none;align-items:center;gap:8px;
+}
+.error-banner.show{display:flex;}
+
+.btn-login{
+  width:100%;padding:14px;border:none;cursor:pointer;
+  background:linear-gradient(135deg,var(--blue-800),var(--blue-600));
+  color:#fff;font-family:inherit;font-size:15px;font-weight:700;
+  border-radius:var(--radius);transition:transform .15s,box-shadow .15s;
+  box-shadow:0 4px 16px rgba(16,80,168,.35);
+}
+.btn-login:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(16,80,168,.45);}
+.login-note{text-align:center;font-size:12px;color:var(--text-muted);margin-top:20px;}
+
+/* ─── APP SHELL ──────────────────────────────────────────── */
+#app{display:none;flex-direction:row;min-height:100vh;}
+#app.show{display:flex;}
+
+/* ─── SIDEBAR ────────────────────────────────────────────── */
+.sidebar{
+  width:248px;flex-shrink:0;
+  background:var(--blue-900);
+  display:flex;flex-direction:column;
+  height:100vh;position:sticky;top:0;overflow-y:auto;
+  transition:width .25s;
+}
+.sidebar.collapsed{width:64px;}
+.sidebar-logo{
+  display:flex;align-items:center;gap:10px;
+  padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.08);
+}
+.sidebar-logo-icon{
+  width:36px;height:36px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.2),rgba(255,255,255,.08));
+  border:1px solid rgba(255,255,255,.15);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:14px;font-weight:800;letter-spacing:-1px;
+}
+.sidebar-logo-text{overflow:hidden;}
+.sidebar-logo-text .brand{color:#fff;font-size:14px;font-weight:700;white-space:nowrap;}
+.sidebar-logo-text .sub{color:rgba(255,255,255,.4);font-size:10px;white-space:nowrap;}
+
+.sidebar-user{
+  display:flex;align-items:center;gap:10px;
+  padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.avatar{
+  width:34px;height:34px;flex-shrink:0;border-radius:50%;
+  background:linear-gradient(135deg,#3B82F6,#0EA5E9);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:12px;font-weight:700;
+}
+.avatar.green{background:linear-gradient(135deg,#10B981,#059669);}
+.avatar.orange{background:linear-gradient(135deg,var(--orange),#EF4444);}
+.sidebar-user-info{overflow:hidden;}
+.sidebar-user-info .name{color:#fff;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sidebar-user-info .role{color:rgba(255,255,255,.45);font-size:10px;white-space:nowrap;}
+.online{width:8px;height:8px;background:#22C55E;border-radius:50%;flex-shrink:0;margin-left:auto;
+  box-shadow:0 0 0 2px rgba(34,197,94,.3);animation:blink 2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
+
+.nav-group{padding:8px 0;}
+.nav-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,.3);padding:8px 16px 4px;white-space:nowrap;overflow:hidden;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px;cursor:pointer;
+  color:rgba(255,255,255,.55);font-size:13px;font-weight:500;
+  border-left:3px solid transparent;transition:all .15s;white-space:nowrap;overflow:hidden;
+}
+.nav-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9);}
+.nav-item.active{
+  background:rgba(255,255,255,.1);color:#fff;
+  border-left-color:var(--orange);font-weight:600;
+}
+.nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
+.nav-text{flex:1;overflow:hidden;text-overflow:ellipsis;}
+.nav-badge{
+  background:var(--orange);color:#fff;
+  font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;flex-shrink:0;
+}
+.nav-badge.danger{background:var(--red);}
+
+.collapse-btn{
+  display:flex;align-items:center;gap:10px;
+  padding:12px 16px;margin-top:auto;cursor:pointer;
+  color:rgba(255,255,255,.4);font-size:13px;border-top:1px solid rgba(255,255,255,.08);
+  transition:color .15s;
+}
+.collapse-btn:hover{color:rgba(255,255,255,.7);}
+
+/* ─── MAIN ───────────────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow-x:hidden;}
+
+/* ─── TOPBAR ─────────────────────────────────────────────── */
+.topbar{
+  background:var(--white);border-bottom:1px solid var(--border);
+  padding:0 28px;height:60px;display:flex;align-items:center;gap:16px;
+  position:sticky;top:0;z-index:50;
+}
+.breadcrumb{font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:6px;}
+.breadcrumb .sep{color:var(--gray-300);}
+.breadcrumb .current{color:var(--blue-900);font-weight:700;}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.search-bar{
+  display:flex;align-items:center;gap:8px;
+  background:var(--gray-100);border:1.5px solid var(--border);border-radius:var(--radius);
+  padding:7px 14px;font-size:13px;color:var(--text-muted);cursor:text;
+  transition:border-color .2s;
+}
+.search-bar:hover{border-color:var(--blue-500);}
+.search-bar input{background:none;border:none;outline:none;font-family:inherit;font-size:13px;color:var(--text);width:180px;}
+.icon-btn{
+  width:36px;height:36px;border-radius:8px;background:var(--gray-100);border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;
+  font-size:16px;color:var(--gray-500);position:relative;
+}
+.icon-btn:hover{border-color:var(--blue-500);color:var(--blue-600);}
+.notif-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--red);border-radius:50%;border:1.5px solid #fff;}
+.status-chip{
+  display:flex;align-items:center;gap:6px;
+  background:var(--green-light);border:1px solid #BBF7D0;border-radius:20px;
+  padding:5px 12px;font-size:11px;font-weight:600;color:var(--green);
+}
+.status-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:blink 1.5s infinite;}
+.status-chip.offline{background:var(--yellow-light);border-color:#FDE68A;color:var(--yellow);}
+.status-chip.offline .status-dot{background:var(--yellow);}
+
+/* ─── OFFLINE BAR ────────────────────────────────────────── */
+.offline-bar{
+  background:#FFFBEB;border-bottom:1px solid #FDE68A;
+  padding:8px 28px;font-size:12px;color:var(--yellow);
+  display:none;align-items:center;gap:8px;font-weight:500;
+}
+.offline-bar.show{display:flex;}
+
+/* ─── CONTENT ────────────────────────────────────────────── */
+.content{padding:28px;flex:1;}
+.view{display:none;animation:fadeIn .25s ease;}
+.view.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ─── PAGE HEADER ────────────────────────────────────────── */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;}
+.page-title{font-size:22px;font-weight:800;color:var(--blue-900);line-height:1.2;}
+.page-sub{font-size:13px;color:var(--text-muted);margin-top:4px;}
+.actions{display:flex;gap:10px;align-items:center;}
+
+/* ─── BUTTONS ────────────────────────────────────────────── */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:inherit;transition:all .15s;}
+.btn-primary{background:linear-gradient(135deg,var(--blue-800),var(--blue-600));color:#fff;box-shadow:0 2px 8px rgba(16,80,168,.25);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(16,80,168,.35);}
+.btn-orange{background:linear-gradient(135deg,#C06010,var(--orange));color:#fff;box-shadow:0 2px 8px rgba(224,120,32,.25);}
+.btn-orange:hover{transform:translateY(-1px);}
+.btn-outline{background:var(--white);border:1.5px solid var(--border);color:var(--gray-600);}
+.btn-outline:hover{border-color:var(--blue-500);color:var(--blue-600);}
+.btn-ghost{background:transparent;color:var(--blue-600);padding:6px 12px;}
+.btn-ghost:hover{background:var(--blue-50);}
+.btn-sm{padding:6px 14px;font-size:12px;}
+.btn-danger{background:var(--red-light);border:1.5px solid #FECACA;color:var(--red);}
+.btn-success{background:var(--green-light);border:1.5px solid #BBF7D0;color:var(--green);}
+
+/* ─── CARDS ──────────────────────────────────────────────── */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+.card-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-title{font-size:14px;font-weight:700;color:var(--blue-900);}
+.card-body{padding:20px;}
+.card-body.p0{padding:0;}
+
+/* ─── STAT CARDS ─────────────────────────────────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.stat-card{
+  background:var(--white);border:1px solid var(--border);border-radius:12px;
+  padding:20px;position:relative;overflow:hidden;box-shadow:var(--shadow);
+  transition:box-shadow .2s;
+}
+.stat-card:hover{box-shadow:var(--shadow-md);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,var(--blue-600));}
+.stat-num{font-size:28px;font-weight:800;color:var(--blue-900);line-height:1;margin-bottom:4px;}
+.stat-label{font-size:12px;color:var(--text-muted);font-weight:500;}
+.stat-change{font-size:11px;margin-top:8px;display:flex;align-items:center;gap:4px;font-weight:600;}
+.stat-change.up{color:var(--green);}
+.stat-change.down{color:var(--red);}
+.stat-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.12;}
+
+/* ─── GRIDS ──────────────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.g12{display:grid;grid-template-columns:1fr 2fr;gap:20px;}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:20px;}
+.g31{display:grid;grid-template-columns:3fr 1fr;gap:20px;}
+.mb20{margin-bottom:20px;}
+.mb24{margin-bottom:24px;}
+.mt16{margin-top:16px;}
+.mt12{margin-top:12px;}
+
+/* ─── TABLE ──────────────────────────────────────────────── */
+.tbl-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{background:var(--gray-50);padding:10px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--gray-50);color:var(--text);vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--blue-50);}
+
+/* ─── BADGES ─────────────────────────────────────────────── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.b-green{background:var(--green-light);color:var(--green);}
+.b-yellow{background:var(--yellow-light);color:var(--yellow);}
+.b-red{background:var(--red-light);color:var(--red);}
+.b-blue{background:var(--blue-100);color:var(--blue-700);}
+.b-gray{background:var(--gray-100);color:var(--gray-600);}
+.b-orange{background:var(--orange-light);color:var(--orange);}
+
+/* ─── FORMS ──────────────────────────────────────────────── */
+.form-row{display:grid;gap:16px;margin-bottom:16px;}
+.form-row.cols-2{grid-template-columns:1fr 1fr;}
+.form-row.cols-3{grid-template-columns:1fr 1fr 1fr;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.lbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--gray-600);}
+.lbl .req{color:var(--red);margin-left:2px;}
+.inp,.sel,.txta{
+  padding:10px 14px;border:1.5px solid var(--border);border-radius:var(--radius);
+  font-family:inherit;font-size:13px;color:var(--text);background:var(--white);outline:none;
+  transition:border-color .2s,box-shadow .2s;width:100%;
+}
+.inp:focus,.sel:focus,.txta:focus{border-color:var(--blue-600);box-shadow:0 0 0 3px rgba(34,115,224,.1);}
+.inp.error{border-color:var(--red);}
+.hint{font-size:11px;color:var(--text-muted);}
+.sel option{background:var(--white);}
+
+/* ─── WIZARD STEPS ───────────────────────────────────────── */
+.wizard{display:flex;align-items:center;gap:0;margin-bottom:32px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px 28px;box-shadow:var(--shadow);}
+.wstep{display:flex;align-items:center;flex:1;}
+.wstep-circle{
+  width:34px;height:34px;border-radius:50%;border:2px solid var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;
+  flex-shrink:0;background:var(--white);color:var(--text-muted);transition:all .3s;
+}
+.wstep.done .wstep-circle{background:var(--green);border-color:var(--green);color:#fff;}
+.wstep.active .wstep-circle{background:var(--blue-600);border-color:var(--blue-600);color:#fff;box-shadow:0 0 0 4px rgba(34,115,224,.15);}
+.wstep-label{margin-left:10px;flex:1;}
+.wstep-num{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;}
+.wstep-name{font-size:13px;font-weight:600;color:var(--text-muted);}
+.wstep.active .wstep-name{color:var(--blue-700);}
+.wstep.done .wstep-name{color:var(--green);}
+.wstep-line{flex:1;height:1.5px;background:var(--border);margin:0 12px;}
+.wstep.done~.wstep .wstep-line{background:var(--green);}
+.wstep.done .wstep-line{background:var(--green);}
+
+/* ─── SECTOR BUTTONS ─────────────────────────────────────── */
+.sector-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:20px;}
+.sector-btn{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding:16px 12px;background:var(--white);border:2px solid var(--border);
+  border-radius:12px;cursor:pointer;transition:all .2s;text-align:center;
+}
+.sector-btn:hover{border-color:var(--blue-500);background:var(--blue-50);}
+.sector-btn.sel{border-color:var(--blue-600);background:var(--blue-50);box-shadow:0 0 0 3px rgba(34,115,224,.1);}
+.sector-emoji{font-size:26px;}
+.sector-name{font-size:11px;font-weight:700;color:var(--blue-900);}
+.sector-desc{font-size:10px;color:var(--text-muted);}
+
+/* ─── DRAG & DROP ────────────────────────────────────────── */
+.dropzone{
+  border:2px dashed var(--border);border-radius:12px;padding:32px;
+  text-align:center;cursor:pointer;transition:all .2s;background:var(--gray-50);
+}
+.dropzone:hover,.dropzone.over{border-color:var(--blue-500);background:var(--blue-50);}
+.drop-icon{font-size:36px;margin-bottom:10px;}
+.drop-title{font-size:14px;font-weight:600;color:var(--blue-900);margin-bottom:4px;}
+.drop-sub{font-size:12px;color:var(--text-muted);}
+.file-list{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+.file-item{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 14px;}
+.file-ico{font-size:20px;}
+.file-info{flex:1;}
+.file-name{font-size:13px;font-weight:600;}
+.file-size{font-size:11px;color:var(--text-muted);}
+.file-ok{font-size:12px;color:var(--green);font-weight:600;}
+
+/* ─── CHECKLIST ──────────────────────────────────────────── */
+.checklist{display:flex;flex-direction:column;gap:8px;}
+.chk-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;transition:all .2s;font-size:13px;}
+.chk-item:hover{border-color:var(--gray-300);}
+.chk-item.done{border-color:#BBF7D0;background:var(--green-light);}
+.chk-item.locked{border-color:#FECACA;background:var(--red-light);opacity:.8;cursor:not-allowed;}
+.chk-box{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;transition:all .2s;}
+.chk-item.done .chk-box{background:var(--green);border-color:var(--green);color:#fff;}
+.chk-item.locked .chk-box{background:var(--red);border-color:var(--red);color:#fff;}
+.chk-tag{margin-left:auto;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;}
+.chk-item.done .chk-tag{color:var(--green);}
+.chk-item.locked .chk-tag{color:var(--red);}
+.chk-tag.pending{color:var(--text-muted);}
+
+.lock-notice{
+  display:flex;align-items:center;gap:10px;
+  background:#FFF7ED;border:1px solid #FED7AA;border-radius:8px;
+  padding:12px 16px;font-size:13px;color:var(--orange);font-weight:500;margin-top:14px;
+}
+
+/* ─── CHARTS ─────────────────────────────────────────────── */
+.chart-wrap{position:relative;padding:16px 0 8px;}
+.chart-bars{display:flex;align-items:flex-end;gap:8px;height:160px;padding:0 8px;}
+.c-bar-group{display:flex;align-items:flex-end;gap:3px;flex:1;position:relative;}
+.c-bar{border-radius:4px 4px 0 0;flex:1;transition:height .7s ease,opacity .3s;cursor:pointer;min-width:10px;}
+.c-bar:hover{opacity:.8;}
+.c-bar.actual{background:linear-gradient(180deg,var(--blue-600),var(--blue-800));}
+.c-bar.projected{background:linear-gradient(180deg,rgba(34,115,224,.3),rgba(34,115,224,.1));border:1.5px dashed var(--blue-500);border-bottom:none;}
+.chart-labels{display:flex;gap:8px;padding:6px 8px 0;justify-content:space-around;}
+.c-lbl{flex:1;text-align:center;font-size:10px;color:var(--text-muted);}
+.chart-legend{display:flex;gap:16px;padding:0 8px;margin-top:4px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-muted);}
+.legend-dot{width:10px;height:10px;border-radius:2px;}
+
+.line-chart-wrap{height:140px;position:relative;overflow:hidden;}
+.line-chart-wrap svg{width:100%;height:100%;}
+
+/* ─── SUPUESTOS ──────────────────────────────────────────── */
+.supuesto-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.supuesto-card{background:var(--blue-50);border:1.5px solid var(--blue-100);border-radius:10px;padding:14px;}
+.sup-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--blue-700);margin-bottom:6px;}
+.sup-input{
+  width:100%;padding:9px 12px;border:1.5px solid var(--blue-200,#BFDBFE);border-radius:8px;
+  font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--blue-900);
+  background:var(--white);outline:none;transition:border-color .2s;
+}
+.sup-input:focus{border-color:var(--blue-600);}
+.sup-hint{font-size:10px;color:var(--blue-600);margin-top:4px;}
+
+.result-box{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-top:12px;}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid var(--gray-50);}
+.result-row:last-child{border-bottom:none;font-weight:700;}
+.result-val{font-family:'IBM Plex Mono',monospace;font-weight:700;}
+.result-val.good{color:var(--green);}
+.result-val.warn{color:var(--yellow);}
+.result-val.bad{color:var(--red);}
+
+/* ─── RISK METER ─────────────────────────────────────────── */
+.risk-gauge{text-align:center;padding:20px 0;}
+.risk-score-num{font-size:48px;font-weight:800;line-height:1;}
+.risk-score-lbl{font-size:13px;font-weight:600;margin-top:4px;}
+.risk-track{height:12px;border-radius:6px;background:linear-gradient(90deg,#16A34A 0%,#D97706 50%,#DC2626 100%);position:relative;margin:16px 0 8px;}
+.risk-cursor{position:absolute;top:-4px;width:20px;height:20px;background:#fff;border-radius:50%;border:2.5px solid var(--blue-900);box-shadow:var(--shadow);transform:translateX(-50%);transition:left .5s ease;}
+.risk-ticks{display:flex;justify-content:space-between;font-size:10px;}
+
+/* ─── BAR CHART ROWS ─────────────────────────────────────── */
+.bar-rows{display:flex;flex-direction:column;gap:12px;}
+.br-row{display:flex;align-items:center;gap:10px;}
+.br-lbl{font-size:12px;color:var(--text-muted);width:100px;text-align:right;flex-shrink:0;}
+.br-track{flex:1;background:var(--gray-100);height:8px;border-radius:4px;overflow:hidden;}
+.br-fill{height:100%;border-radius:4px;transition:width .8s ease;}
+.br-val{font-size:12px;font-weight:700;width:38px;font-family:'IBM Plex Mono',monospace;flex-shrink:0;}
+
+/* ─── TOGGLE SWITCH ──────────────────────────────────────── */
+.toggle-wrap{display:inline-flex;align-items:center;cursor:pointer;}
+.toggle-track{width:36px;height:20px;border-radius:10px;background:var(--gray-300);position:relative;transition:background .2s;}
+.toggle-track.on{background:var(--blue-600);}
+.toggle-knob{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .2s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.toggle-track.on .toggle-knob{left:19px;}
+
+/* ─── PERM TABLE ─────────────────────────────────────────── */
+.perm-table{width:100%;}
+.perm-row{display:grid;grid-template-columns:1fr repeat(5,56px);align-items:center;padding:10px 16px;font-size:13px;border-bottom:1px solid var(--gray-50);}
+.perm-row:last-child{border-bottom:none;}
+.perm-row.hdr{background:var(--gray-50);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);}
+.perm-col{text-align:center;}
+
+/* ─── AUDIT LOG ──────────────────────────────────────────── */
+.log-tbl td{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--gray-600);}
+.log-tbl .op-ins{background:#DCFCE7;color:#166534;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;}
+.log-tbl .op-upd{background:#DBEAFE;color:#1D4ED8;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;}
+.log-tbl .op-del{background:#FEE2E2;color:#991B1B;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;}
+
+/* ─── MOTOR REGLAS ───────────────────────────────────────── */
+.rule-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:16px;margin-bottom:12px;transition:border-color .2s;}
+.rule-card:hover{border-color:var(--blue-400,#60A5FA);}
+.rule-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.rule-name{font-size:13px;font-weight:700;color:var(--blue-900);}
+.rule-inputs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.rule-field{display:flex;flex-direction:column;gap:4px;}
+.rule-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);}
+.rule-inp{padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:var(--blue-900);background:var(--gray-50);outline:none;width:100%;transition:border-color .2s;}
+.rule-inp:focus{border-color:var(--blue-600);background:var(--white);}
+
+/* ─── MODAL ──────────────────────────────────────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,30,60,.45);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:16px;box-shadow:var(--shadow-lg);width:540px;max-width:92vw;max-height:88vh;overflow-y:auto;animation:slideUp .3s ease;}
+@keyframes slideUp{from{transform:translateY(24px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-hdr{padding:22px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-size:16px;font-weight:800;color:var(--blue-900);}
+.modal-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--gray-400);line-height:1;transition:color .15s;}
+.modal-close:hover{color:var(--red);}
+.modal-body{padding:24px;}
+.modal-ftr{padding:16px 24px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
+
+/* ─── TABS ───────────────────────────────────────────────── */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:24px;}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:var(--blue-700);}
+.tab.active{color:var(--blue-700);border-bottom-color:var(--blue-600);}
+.tab-pane{display:none;}
+.tab-pane.active{display:block;}
+
+/* ─── ALERT BOXES ────────────────────────────────────────── */
+.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:14px;}
+.alert-ico{font-size:16px;flex-shrink:0;margin-top:1px;}
+.alert-text{color:var(--text);}
+.alert-text strong{font-weight:700;}
+.a-info{background:#EFF6FF;border:1px solid #BFDBFE;}
+.a-warn{background:var(--yellow-light);border:1px solid #FDE68A;}
+.a-success{background:var(--green-light);border:1px solid #BBF7D0;}
+.a-danger{background:var(--red-light);border:1px solid #FECACA;}
+
+/* ─── DIVIDER ────────────────────────────────────────────── */
+.divider{border:none;border-top:1px solid var(--border);margin:18px 0;}
+
+/* ─── INFO BOX ───────────────────────────────────────────── */
+.info-box{background:var(--blue-50);border:1px solid var(--blue-100);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--blue-700);line-height:1.6;}
+.info-box strong{color:var(--blue-900);}
+
+/* ─── GUARANTEE COVERAGE ─────────────────────────────────── */
+.coverage-big{text-align:center;padding:16px 0;}
+.coverage-num{font-size:52px;font-weight:800;color:var(--green);line-height:1;}
+.coverage-lbl{font-size:13px;color:var(--text-muted);margin-top:4px;}
+
+/* ─── TIMELINE ───────────────────────────────────────────── */
+.phase-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.phase-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;position:relative;overflow:hidden;}
+.phase-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--phase-c,var(--border));}
+.phase-n{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px;}
+.phase-name{font-size:13px;font-weight:700;color:var(--blue-900);margin-bottom:8px;}
+.phase-days{font-size:30px;font-weight:800;color:var(--phase-c,var(--text-muted));line-height:1;}
+.phase-unit{font-size:10px;color:var(--text-muted);}
+
+/* ─── PROGRESS BAR ───────────────────────────────────────── */
+.prog-track{height:8px;background:var(--gray-100);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--blue-600),var(--blue-500));transition:width 1s ease;}
+
+/* ─── RESPONSIVE ─────────────────────────────────────────── */
+@media(max-width:1200px){.stat-grid{grid-template-columns:repeat(2,1fr)}.g31{grid-template-columns:1fr}.phase-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+  .sidebar{width:64px;}
+  .sidebar .nav-text,.sidebar .nav-label,.sidebar .nav-badge,.sidebar-logo-text,.sidebar-user-info,.collapse-btn span{display:none;}
+  .main{min-width:0;}
+  .g2,.g3,.g12,.g21,.g31{grid-template-columns:1fr;}
+  .sector-grid{grid-template-columns:repeat(3,1fr);}
+  .content{padding:16px;}
+  .login-left{display:none;}
+  .login-right{width:100%;}
+  .stat-grid{grid-template-columns:repeat(2,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  LOGIN                                                   ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div id="screen-login">
+  <!-- MITAD IZQUIERDA — BRANDING -->
+  <div class="login-left">
+    <div class="login-left-bg"></div>
+    <div class="login-left-content">
+      <div class="badge">🇧🇴 Bolivia Productiva</div>
+      <h1>Plataforma Digital <span>Crediticia BDP</span></h1>
+      <p>Evaluación ágil de créditos Pyme y Banca Empresa con herramientas especializadas para el sector agropecuario boliviano.</p>
+      <div class="login-pills">
+        <span class="login-pill">🌾 Agrícola</span>
+        <span class="login-pill">🐄 Pecuario</span>
+        <span class="login-pill">🏭 Industrial</span>
+        <span class="login-pill">📊 Evaluación Financiera</span>
+        <span class="login-pill">🔐 Offline-First</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MITAD DERECHA — FORMULARIO -->
+  <div class="login-right">
+    <div class="login-form-wrap">
+      <div class="login-logo">
+        <div class="login-logo-icon">BDP</div>
+        <div class="login-logo-text">
+          <div class="brand">BDP S.A.M.</div>
+          <div class="sub">Banco de Desarrollo Productivo</div>
+        </div>
+      </div>
+
+      <h2>Bienvenido</h2>
+      <p class="tagline">Ingrese sus credenciales para acceder al sistema</p>
+
+      <div class="error-banner" id="errBanner">
+        <span>⚠</span>
+        <span id="errMsg">Credenciales incorrectas. Intentos restantes: 2</span>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Usuario / Correo</label>
+        <input class="field-input" id="loginUser" placeholder="analista@bdp.bo" value="analista@bdp.bo">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Contraseña</label>
+        <div class="input-wrap">
+          <input class="field-input" id="loginPwd" type="password" placeholder="••••••••" value="password">
+          <span class="pw-eye" onclick="togglePwd()">👁</span>
+        </div>
+      </div>
+
+      <button class="btn-login" onclick="doLogin()">Ingresar al Sistema</button>
+      <p class="login-note">Acceso bloqueado tras 3 intentos fallidos · Sesión cifrada con JWT</p>
+    </div>
+  </div>
+</div>
+
+<!-- ╔══════════════════════════════════════════════════════════╗
+     ║  APP                                                     ║
+     ╚══════════════════════════════════════════════════════════╝ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">B</div>
+      <div class="sidebar-logo-text">
+        <div class="brand">BDP Crédito</div>
+        <div class="sub">Pyme · Banca Empresa</div>
+      </div>
+    </div>
+    <div class="sidebar-user">
+      <div class="avatar">MA</div>
+      <div class="sidebar-user-info">
+        <div class="name">María Ávila</div>
+        <div class="role">Analista Crédito</div>
+      </div>
+      <div class="online"></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Principal</div>
+      <div class="nav-item active" onclick="go('dashboard',this)"><span class="nav-icon">📊</span><span class="nav-text">Dashboard</span></div>
+      <div class="nav-item" onclick="go('solicitudes',this)"><span class="nav-icon">📋</span><span class="nav-text">Solicitudes</span><span class="nav-badge">12</span></div>
+      <div class="nav-item" onclick="go('nueva',this)"><span class="nav-icon">➕</span><span class="nav-text">Nueva Solicitud</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Análisis</div>
+      <div class="nav-item" onclick="go('financiero',this)"><span class="nav-icon">🧮</span><span class="nav-text">Evaluación Financiera</span></div>
+      <div class="nav-item" onclick="go('riesgo',this)"><span class="nav-icon">📈</span><span class="nav-text">Calificación Riesgo</span></div>
+      <div class="nav-item" onclick="go('sectorial',this)"><span class="nav-icon">🌾</span><span class="nav-text">Eval. Sectorial</span><span class="nav-badge" style="background:var(--green)">RF-04</span></div>
+      <div class="nav-item" onclick="go('scoring',this)"><span class="nav-icon">🎯</span><span class="nav-text">Scoring Crediticio</span><span class="nav-badge" style="background:var(--orange)">RF-11</span></div>
+      <div class="nav-item" onclick="go('garantias',this)"><span class="nav-icon">🏠</span><span class="nav-text">Garantías</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Monitoreo</div>
+      <div class="nav-item" onclick="go('monitoreo',this)"><span class="nav-icon">📡</span><span class="nav-text">Monitoreo en Tiempo Real</span><span class="nav-badge" style="background:var(--blue-600)">RF-12</span></div>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Back Office</div>
+      <div class="nav-item" onclick="go('admin',this)"><span class="nav-icon">⚙</span><span class="nav-text">Panel Administración</span></div>
+      <div class="nav-item" onclick="go('auditoria',this)"><span class="nav-icon">🔒</span><span class="nav-text">Auditoría & Logs</span><span class="nav-badge" style="background:var(--red)">RF-08</span></div>
+      <div class="nav-item" onclick="go('reportes',this)"><span class="nav-icon">📑</span><span class="nav-text">Reportes & Exportación</span></div>
+    </div>
+
+    <div class="collapse-btn" onclick="collapseNav()">
+      <span style="font-size:16px;">◀</span>
+      <span>Colapsar menú</span>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="breadcrumb">
+        BDP <span class="sep">›</span> <span class="current" id="bcCurrent">Dashboard</span>
+      </div>
+      <div class="topbar-right">
+        <div class="search-bar">
+          <span style="color:var(--gray-400)">🔍</span>
+          <input placeholder="Buscar cliente, NIT, solicitud...">
+        </div>
+        <div class="status-chip" id="statusChip">
+          <div class="status-dot"></div>
+          En línea
+        </div>
+        <div class="icon-btn" onclick="toggleOffline()" title="Simular modo offline">📡</div>
+        <div class="icon-btn">🔔<div class="notif-dot"></div></div>
+        <div class="icon-btn" onclick="logout()" title="Cerrar sesión">🚪</div>
+      </div>
+    </header>
+
+    <!-- OFFLINE BAR -->
+    <div class="offline-bar" id="offlineBar">
+      ⚠ <strong>Modo Sin Conexión (RNF-01)</strong> — Trabajando offline. Los datos se sincronizarán automáticamente al reconectar.
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- ▸ DASHBOARD ─────────────────────────────────────── -->
+      <div class="view active" id="v-dashboard">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Dashboard</div>
+            <div class="page-sub">Centro de control · Pyme & Banca Empresa · Actualizado hace 2 min</div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-outline btn-sm" onclick="go('reportes',null)">📑 Exportar</button>
+            <button class="btn btn-primary btn-sm" onclick="go('nueva',null)">➕ Nueva Solicitud</button>
+          </div>
+        </div>
+
+        <!-- STAT CARDS -->
+        <div class="stat-grid">
+          <div class="stat-card" style="--card-accent:var(--blue-600)">
+            <div class="stat-icon">📋</div>
+            <div class="stat-label">Solicitudes Activas</div>
+            <div class="stat-num">47</div>
+            <div class="stat-change up">▲ +8% vs mes anterior</div>
+          </div>
+          <div class="stat-card" style="--card-accent:#059669">
+            <div class="stat-icon">💰</div>
+            <div class="stat-label">Cartera Aprobada</div>
+            <div class="stat-num">Bs 12.4M</div>
+            <div class="stat-change up">▲ Cartera sana 94.2%</div>
+          </div>
+          <div class="stat-card" style="--card-accent:var(--orange)">
+            <div class="stat-icon">⏱</div>
+            <div class="stat-label">Tiempo Prom. Aprobación</div>
+            <div class="stat-num">3.2d</div>
+            <div class="stat-change up">▲ Antes 15–21 días</div>
+          </div>
+          <div class="stat-card" style="--card-accent:var(--yellow)">
+            <div class="stat-icon">⚠</div>
+            <div class="stat-label">Pendientes Comité</div>
+            <div class="stat-num">7</div>
+            <div class="stat-change down">● 2 requieren atención</div>
+          </div>
+        </div>
+
+        <div class="g21 mb20">
+          <!-- TABLA -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Solicitudes Recientes</div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input class="inp" placeholder="🔍 Buscar NIT / nombre..." style="width:200px;padding:7px 12px;">
+                <select class="sel" style="width:140px;padding:7px 10px;"><option>Todos los estados</option><option>En Análisis</option><option>Aprobado</option><option>Observado</option></select>
+                <button class="btn btn-ghost btn-sm" onclick="go('solicitudes',null)">Ver todas →</button>
+              </div>
+            </div>
+            <div class="card-body p0">
+              <div class="tbl-wrap">
+                <table>
+                  <thead><tr><th>ID</th><th>Cliente</th><th>Sector</th><th>Monto Bs.</th><th>Estado</th><th>Acción</th></tr></thead>
+                  <tbody>
+                    <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-089</td><td><b>Agropecuaria El Ceibo</b><br><small style="color:var(--text-muted)">Santa Cruz</small></td><td>🌾 Agrícola</td><td style="font-family:'IBM Plex Mono',monospace">850.000</td><td><span class="badge b-yellow">⏳ En Análisis</span></td><td><button class="btn btn-outline btn-sm" onclick="go('financiero',null)">Evaluar</button></td></tr>
+                    <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-088</td><td><b>Ganadería Los Andes</b><br><small style="color:var(--text-muted)">Beni</small></td><td>🐄 Pecuario</td><td style="font-family:'IBM Plex Mono',monospace">1.200.000</td><td><span class="badge b-green">✓ Aprobado</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+                    <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-087</td><td><b>TecnoAlimentos Ltda.</b><br><small style="color:var(--text-muted)">La Paz</small></td><td>🏭 Industrial</td><td style="font-family:'IBM Plex Mono',monospace">450.000</td><td><span class="badge b-blue">📤 En Comité</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+                    <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-086</td><td><b>Coop. Papa Altiplano</b><br><small style="color:var(--text-muted)">Oruro</small></td><td>🥔 Agrícola</td><td style="font-family:'IBM Plex Mono',monospace">320.000</td><td><span class="badge b-red">✗ Observado</span></td><td><button class="btn btn-outline btn-sm">Revisar</button></td></tr>
+                    <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-085</td><td><b>Transportes del Sur</b><br><small style="color:var(--text-muted)">Tarija</small></td><td>🚛 Transporte</td><td style="font-family:'IBM Plex Mono',monospace">680.000</td><td><span class="badge b-green">⚙ Desembolso</span></td><td><button class="btn btn-outline btn-sm">Ver</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIDE CARDS -->
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Por Sector</div></div>
+              <div class="card-body">
+                <div class="bar-rows">
+                  <div class="br-row"><div class="br-lbl">Agrícola</div><div class="br-track"><div class="br-fill" style="width:72%;background:linear-gradient(90deg,var(--blue-600),var(--blue-500))"></div></div><div class="br-val" style="color:var(--blue-600)">72%</div></div>
+                  <div class="br-row"><div class="br-lbl">Pecuario</div><div class="br-track"><div class="br-fill" style="width:55%;background:linear-gradient(90deg,#059669,#10B981)"></div></div><div class="br-val" style="color:var(--green)">55%</div></div>
+                  <div class="br-row"><div class="br-lbl">Industrial</div><div class="br-track"><div class="br-fill" style="width:38%;background:linear-gradient(90deg,#7C3AED,#8B5CF6)"></div></div><div class="br-val" style="color:#7C3AED">38%</div></div>
+                  <div class="br-row"><div class="br-lbl">Transporte</div><div class="br-track"><div class="br-fill" style="width:22%;background:linear-gradient(90deg,var(--orange),#F59E0B)"></div></div><div class="br-val" style="color:var(--orange)">22%</div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Estado Sistema</div></div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:10px;font-size:12px;">
+                <div style="display:flex;justify-content:space-between;align-items:center"><span>API CORE Bancario</span><span class="badge b-green">● Online</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span>Base de Datos</span><span class="badge b-green">● Activo</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span>Usuarios activos</span><span class="badge b-blue">38 / 500</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span>Logs Auditoría</span><span class="badge b-green">● Inmutable</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ SOLICITUDES ─────────────────────────────────────── -->
+      <div class="view" id="v-solicitudes">
+        <div class="page-header">
+          <div><div class="page-title">Gestión de Solicitudes</div><div class="page-sub">RF-02 · Pyme & Banca Empresa</div></div>
+          <div class="actions"><button class="btn btn-outline btn-sm">📊 Excel</button><button class="btn btn-outline btn-sm">📄 PDF</button><button class="btn btn-primary" onclick="go('nueva',null)">➕ Nueva</button></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <input class="inp" placeholder="🔍 Buscar por NIT, nombre, ID..." style="width:260px;padding:8px 12px;">
+              <select class="sel" style="width:150px;padding:8px 10px;"><option>Todos los estados</option><option>En Análisis</option><option>En Comité</option><option>Aprobado</option><option>Observado</option></select>
+              <select class="sel" style="width:140px;padding:8px 10px;"><option>Todos sectores</option><option>Agrícola</option><option>Pecuario</option><option>Industrial</option></select>
+            </div>
+          </div>
+          <div class="card-body p0">
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr><th>Nro.</th><th>Solicitante</th><th>Tipo</th><th>Sector</th><th>Monto Bs.</th><th>Analista</th><th>Estado</th><th>Riesgo</th><th>Fecha</th><th>Acción</th></tr></thead>
+                <tbody>
+                  <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600);font-weight:600">089</td><td><b>Agropecuaria El Ceibo</b><br><small style="color:var(--text-muted)">NIT: 1023450012</small></td><td><span class="badge b-blue">Pyme</span></td><td>🌾 Agrícola</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">850.000</td><td>M. Ávila</td><td><span class="badge b-yellow">⏳ Análisis</span></td><td><span class="badge b-yellow">Moderado</span></td><td style="color:var(--text-muted);font-size:12px">15/06/24</td><td><button class="btn btn-outline btn-sm" onclick="go('financiero',null)">Evaluar</button></td></tr>
+                  <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600);font-weight:600">088</td><td><b>Ganadería Los Andes</b><br><small style="color:var(--text-muted)">NIT: 4056780023</small></td><td><span class="badge b-orange">BE</span></td><td>🐄 Pecuario</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">1.200.000</td><td>R. Flores</td><td><span class="badge b-green">✓ Aprobado</span></td><td><span class="badge b-green">Bajo</span></td><td style="color:var(--text-muted);font-size:12px">12/06/24</td><td><button class="btn btn-outline btn-sm">Detalle</button></td></tr>
+                  <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600);font-weight:600">087</td><td><b>TecnoAlimentos Ltda.</b><br><small style="color:var(--text-muted)">NIT: 8901230034</small></td><td><span class="badge b-blue">Pyme</span></td><td>🏭 Industrial</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">450.000</td><td>M. Ávila</td><td><span class="badge b-blue">📤 Comité</span></td><td><span class="badge b-yellow">Moderado</span></td><td style="color:var(--text-muted);font-size:12px">10/06/24</td><td><button class="btn btn-outline btn-sm">Detalle</button></td></tr>
+                  <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600);font-weight:600">086</td><td><b>Coop. Papa Altiplano</b><br><small style="color:var(--text-muted)">NIT: 2345670045</small></td><td><span class="badge b-blue">Pyme</span></td><td>🥔 Agrícola</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">320.000</td><td>C. Mamani</td><td><span class="badge b-red">✗ Observado</span></td><td><span class="badge b-red">Alto</span></td><td style="color:var(--text-muted);font-size:12px">08/06/24</td><td><button class="btn btn-outline btn-sm">Revisar</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ NUEVA SOLICITUD ────────────────────────────────── -->
+      <div class="view" id="v-nueva">
+        <div class="page-header">
+          <div><div class="page-title">Nueva Solicitud de Crédito</div><div class="page-sub">RF-02 · Registro único · datos se propagan automáticamente</div></div>
+        </div>
+
+        <!-- WIZARD -->
+        <div class="wizard">
+          <div class="wstep done">
+            <div class="wstep-circle">✓</div>
+            <div class="wstep-label"><div class="wstep-num">Paso 1</div><div class="wstep-name">Perfil & Sector</div></div>
+          </div>
+          <div class="wstep-line"></div>
+          <div class="wstep active">
+            <div class="wstep-circle">2</div>
+            <div class="wstep-label"><div class="wstep-num">Paso 2</div><div class="wstep-name">Datos del Cliente</div></div>
+          </div>
+          <div class="wstep-line"></div>
+          <div class="wstep">
+            <div class="wstep-circle">3</div>
+            <div class="wstep-label"><div class="wstep-num">Paso 3</div><div class="wstep-name">Documentación</div></div>
+          </div>
+          <div class="wstep-line"></div>
+          <div class="wstep">
+            <div class="wstep-circle">4</div>
+            <div class="wstep-label"><div class="wstep-num">Paso 4</div><div class="wstep-name">Evaluación</div></div>
+          </div>
+          <div class="wstep-line"></div>
+          <div class="wstep">
+            <div class="wstep-circle">5</div>
+            <div class="wstep-label"><div class="wstep-num">Paso 5</div><div class="wstep-name">Comité</div></div>
+          </div>
+        </div>
+
+        <div class="g2 mb20">
+          <!-- SECTOR SELECTOR -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">🎯 Seleccionar Tipo de Evaluación</div><span class="badge b-blue">Campos dinámicos</span></div>
+            <div class="card-body">
+              <div class="alert a-info mb20"><div class="alert-ico">ℹ</div><div class="alert-text">Al seleccionar el sector, el formulario mostrará u ocultará campos específicos. <strong>Agrícola</strong> activa simulador de sequías; <strong>Pecuario</strong> activa proyección de hato ganadero.</div></div>
+              <div class="sector-grid" id="sectorGrid">
+                <div class="sector-btn sel" onclick="selSector(this)"><span class="sector-emoji">🌾</span><div class="sector-name">Agrícola</div><div class="sector-desc">Soya, papa, quinua</div></div>
+                <div class="sector-btn" onclick="selSector(this)"><span class="sector-emoji">🐄</span><div class="sector-name">Pecuario</div><div class="sector-desc">Ganado, hato</div></div>
+                <div class="sector-btn" onclick="selSector(this)"><span class="sector-emoji">🏭</span><div class="sector-name">Industrial</div><div class="sector-desc">Manufactura</div></div>
+                <div class="sector-btn" onclick="selSector(this)"><span class="sector-emoji">🚛</span><div class="sector-name">Transporte</div><div class="sector-desc">Flota vehicular</div></div>
+                <div class="sector-btn" onclick="selSector(this)"><span class="sector-emoji">🏪</span><div class="sector-name">Comercio</div><div class="sector-desc">Pyme comercial</div></div>
+                <div class="sector-btn" onclick="selSector(this)"><span class="sector-emoji">⚡</span><div class="sector-name">Energía</div><div class="sector-desc">Renovables</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- DATOS CLIENTE -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">👤 Datos del Solicitante</div><span class="badge b-green">Datos únicos reutilizables</span></div>
+            <div class="card-body">
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="lbl">Razón Social <span class="req">*</span></label><input class="inp" value="Agropecuaria El Ceibo S.R.L."></div>
+                <div class="form-group"><label class="lbl">NIT <span class="req">*</span></label><input class="inp" value="1023450012" style="font-family:'IBM Plex Mono',monospace"></div>
+              </div>
+              <div class="form-row cols-3">
+                <div class="form-group"><label class="lbl">Tipo <span class="req">*</span></label><select class="sel"><option>Pyme</option><option>Banca Empresa</option></select></div>
+                <div class="form-group"><label class="lbl">Departamento <span class="req">*</span></label><select class="sel"><option>Santa Cruz</option><option>Beni</option><option>La Paz</option><option>Oruro</option></select></div>
+                <div class="form-group"><label class="lbl">Plazo (meses)</label><input class="inp" value="60"></div>
+              </div>
+              <div class="form-row cols-2">
+                <div class="form-group"><label class="lbl">Monto Solicitado (Bs.) <span class="req">*</span></label><input class="inp" value="850,000.00" style="font-family:'IBM Plex Mono',monospace;font-weight:700"></div>
+                <div class="form-group"><label class="lbl">Tasa de Interés (%)</label><input class="inp" value="6.5" style="font-family:'IBM Plex Mono',monospace"></div>
+              </div>
+              <!-- CAMPOS DINAMICOS AGRICOLA -->
+              <div id="agriExtra">
+                <hr class="divider">
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--blue-700);margin-bottom:12px;">🌾 Datos Sector Agrícola</div>
+                <div class="form-row cols-2">
+                  <div class="form-group"><label class="lbl">Cultivo Principal</label><select class="sel"><option>Soya</option><option>Papa</option><option>Quinua</option><option>Maíz</option></select></div>
+                  <div class="form-group"><label class="lbl">Hectáreas</label><input class="inp" value="250" style="font-family:'IBM Plex Mono',monospace"></div>
+                </div>
+                <div class="form-row cols-2">
+                  <div class="form-group"><label class="lbl">Rendimiento (qq/ha)</label><input class="inp" value="45" style="font-family:'IBM Plex Mono',monospace"></div>
+                  <div class="form-group"><label class="lbl">Precio por Quintal (Bs.)</label><input class="inp" value="280" style="font-family:'IBM Plex Mono',monospace"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DOCUMENTACION + DRAG&DROP -->
+        <div class="g2">
+          <div class="card">
+            <div class="card-header"><div class="card-title">📎 Checklist de Documentación</div><div style="display:flex;gap:6px"><span class="badge b-red">3 pendientes</span><span class="badge b-green">5 listos</span></div></div>
+            <div class="card-body">
+              <div class="checklist">
+                <div class="chk-item done" onclick="toggleChk(this)"><div class="chk-box">✓</div><div style="flex:1">Carnet de Identidad / Pasaporte <span style="color:var(--orange)">★</span></div><div class="chk-tag">Completo</div></div>
+                <div class="chk-item done" onclick="toggleChk(this)"><div class="chk-box">✓</div><div style="flex:1">NIT / Matrícula de Comercio <span style="color:var(--orange)">★</span></div><div class="chk-tag">Completo</div></div>
+                <div class="chk-item done" onclick="toggleChk(this)"><div class="chk-box">✓</div><div style="flex:1">Balance General último año</div><div class="chk-tag">Completo</div></div>
+                <div class="chk-item done" onclick="toggleChk(this)"><div class="chk-box">✓</div><div style="flex:1">Estado de Resultados</div><div class="chk-tag">Completo</div></div>
+                <div class="chk-item done" onclick="toggleChk(this)"><div class="chk-box">✓</div><div style="flex:1">Títulos de Propiedad / Garantía</div><div class="chk-tag">Completo</div></div>
+                <div class="chk-item" onclick="toggleChk(this)"><div class="chk-box"></div><div style="flex:1">Plan de Inversión / Negocio <span style="color:var(--orange)">★</span></div><div class="chk-tag pending">Pendiente</div></div>
+                <div class="chk-item" onclick="toggleChk(this)"><div class="chk-box"></div><div style="flex:1">Declaración Patrimonial Jurada <span style="color:var(--orange)">★</span></div><div class="chk-tag pending">Pendiente</div></div>
+                <div class="chk-item locked"><div class="chk-box">🔒</div><div style="flex:1">Declaración Jurada No Vinculación</div><div class="chk-tag">Bloqueado</div></div>
+              </div>
+              <div class="lock-notice">
+                🔒 <strong>El botón "Enviar a Evaluación" está bloqueado</strong> hasta completar todos los documentos obligatorios (★).
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">📤 Cargar Documentos</div><span class="badge b-gray">RF-08 · Cifrado AES-256</span></div>
+            <div class="card-body">
+              <div class="dropzone" onclick="simulateUpload()" id="dropzone"
+                ondragover="this.classList.add('over');event.preventDefault()"
+                ondragleave="this.classList.remove('over')"
+                ondrop="this.classList.remove('over');simulateUpload();event.preventDefault()">
+                <div class="drop-icon">📁</div>
+                <div class="drop-title">Arrastra archivos aquí o haz clic</div>
+                <div class="drop-sub">PDF, JPG, PNG, XLSX · Máx. 25 MB · Almacenamiento cifrado</div>
+              </div>
+              <div class="file-list" id="fileList">
+                <div class="file-item"><div class="file-ico">📄</div><div class="file-info"><div class="file-name">Balance_General_2023.pdf</div><div class="file-size">2.4 MB · 15/06/2024</div></div><div class="file-ok">✓ Verificado</div></div>
+                <div class="file-item"><div class="file-ico">📊</div><div class="file-info"><div class="file-name">Estado_Resultados_2023.xlsx</div><div class="file-size">890 KB · 15/06/2024</div></div><div class="file-ok">✓ Verificado</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ EVALUACIÓN FINANCIERA ──────────────────────────── -->
+      <div class="view" id="v-financiero">
+        <div class="page-header">
+          <div><div class="page-title">Evaluación Financiera Automatizada</div><div class="page-sub">RF-03 · Flujo de caja, balance, proyecciones e índices financieros</div></div>
+          <div class="actions"><button class="btn btn-outline btn-sm" onclick="openModal('mComite')">📄 Resumen Comité</button><button class="btn btn-primary btn-sm">💾 Guardar</button></div>
+        </div>
+
+        <div class="tabs" id="evalTabs">
+          <div class="tab active" onclick="swTab(this,'tFlujo')">💧 Flujo de Caja</div>
+          <div class="tab" onclick="swTab(this,'tBalance')">⚖ Balance General</div>
+          <div class="tab" onclick="swTab(this,'tProyecciones')">📈 Proyecciones</div>
+          <div class="tab" onclick="swTab(this,'tIndices')">🔢 Índices</div>
+        </div>
+
+        <!-- FLUJO DE CAJA -->
+        <div class="tab-pane active" id="tFlujo">
+          <div class="g2">
+            <div class="card">
+              <div class="card-header"><div class="card-title">📊 Flujo de Caja Proyectado vs. Real</div><span class="badge b-green">Calculado automáticamente</span></div>
+              <div class="card-body">
+                <div class="info-box mb20"><strong>Sector Agrícola — Soya, Santa Cruz:</strong> Los ingresos se proyectan según el ciclo de siembra/cosecha y los supuestos de precio configurados. Sin cálculos manuales en Excel.</div>
+                <div class="chart-wrap">
+                  <div class="chart-bars" id="flujoBars">
+                    <!-- bars rendered by JS -->
+                  </div>
+                  <div class="chart-labels" id="flujoLabels"></div>
+                  <div class="chart-legend">
+                    <div class="legend-item"><div class="legend-dot" style="background:var(--blue-600)"></div>Real/Proyectado</div>
+                    <div class="legend-item"><div class="legend-dot" style="background:rgba(34,115,224,.3);border:1.5px dashed var(--blue-500)"></div>Escenario estrés (-30%)</div>
+                  </div>
+                </div>
+                <div class="alert a-success mt16"><div class="alert-ico">✅</div><div class="alert-text"><strong>Capacidad de pago confirmada:</strong> El flujo neto cubre el servicio de deuda con un margen del 312%. Crédito viable.</div></div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card-header"><div class="card-title">⚙ Supuestos del Escenario</div><span class="badge b-yellow">Motor de reglas RNF-03</span></div>
+              <div class="card-body">
+                <div class="info-box mb20">Modifique los supuestos para ver cómo cambian los resultados <strong>instantáneamente</strong>. Simule sequías, caídas de precios o variaciones de rendimiento.</div>
+                <div class="supuesto-grid">
+                  <div class="supuesto-card">
+                    <div class="sup-label">Precio Quintal Soya (Bs.)</div>
+                    <input class="sup-input" value="280" oninput="recalc()">
+                    <div class="sup-hint">Precio mercado: Bs. 295</div>
+                  </div>
+                  <div class="supuesto-card">
+                    <div class="sup-label">Rendimiento por Ha (qq)</div>
+                    <input class="sup-input" value="45" oninput="recalc()">
+                    <div class="sup-hint">Promedio zona: 48 qq/ha</div>
+                  </div>
+                  <div class="supuesto-card">
+                    <div class="sup-label">Escenario Climático</div>
+                    <select class="sup-input" onchange="recalc()">
+                      <option>Normal (100%)</option>
+                      <option>Sequía leve (-15%)</option>
+                      <option selected>Sequía moderada (-30%)</option>
+                      <option>Sequía severa (-50%)</option>
+                    </select>
+                  </div>
+                  <div class="supuesto-card">
+                    <div class="sup-label">Tasa de Interés (%)</div>
+                    <input class="sup-input" value="6.5" oninput="recalc()">
+                    <div class="sup-hint">Tasa BDP vigente</div>
+                  </div>
+                </div>
+                <div class="result-box">
+                  <div class="result-row"><span>Ingresos ajustados</span><span class="result-val warn" id="r1">Bs. 1.323.000</span></div>
+                  <div class="result-row"><span>Costos totales</span><span class="result-val bad" id="r2">(Bs. 815.000)</span></div>
+                  <div class="result-row"><span>Cobertura deuda</span><span class="result-val good" id="r3">218%</span></div>
+                  <div class="result-row"><span style="font-weight:700">Viabilidad</span><span class="badge b-yellow" id="r4">⚠ Viable con ajuste</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BALANCE -->
+        <div class="tab-pane" id="tBalance">
+          <div class="g2">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Activos</div></div>
+              <div class="card-body p0">
+                <table>
+                  <thead><tr><th>Cuenta</th><th>Bs.</th><th>%</th></tr></thead>
+                  <tbody>
+                    <tr><td>Activo Corriente</td><td style="font-family:'IBM Plex Mono',monospace">320.000</td><td><span class="badge b-blue">9%</span></td></tr>
+                    <tr><td>Inventarios</td><td style="font-family:'IBM Plex Mono',monospace">180.000</td><td><span class="badge b-blue">5%</span></td></tr>
+                    <tr><td>Activo Fijo</td><td style="font-family:'IBM Plex Mono',monospace">1.850.000</td><td><span class="badge b-orange">52%</span></td></tr>
+                    <tr><td>Maquinaria Agrícola</td><td style="font-family:'IBM Plex Mono',monospace">1.200.000</td><td><span class="badge b-orange">34%</span></td></tr>
+                    <tr><td style="font-weight:700">TOTAL ACTIVOS</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--blue-800)">3.550.000</td><td></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Pasivos & Patrimonio</div></div>
+              <div class="card-body p0">
+                <table>
+                  <thead><tr><th>Cuenta</th><th>Bs.</th><th>%</th></tr></thead>
+                  <tbody>
+                    <tr><td>Pasivo Corriente</td><td style="font-family:'IBM Plex Mono',monospace">145.000</td><td><span class="badge b-red">4%</span></td></tr>
+                    <tr><td>Deuda Largo Plazo</td><td style="font-family:'IBM Plex Mono',monospace">850.000</td><td><span class="badge b-yellow">24%</span></td></tr>
+                    <tr><td>Patrimonio Neto</td><td style="font-family:'IBM Plex Mono',monospace">2.555.000</td><td><span class="badge b-green">72%</span></td></tr>
+                    <tr><td style="font-weight:700">TOTAL PAS. + PAT.</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--blue-800)">3.550.000</td><td></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROYECCIONES -->
+        <div class="tab-pane" id="tProyecciones">
+          <div class="card">
+            <div class="card-header"><div class="card-title">📈 Proyección de Ingresos — 5 Años</div><span class="badge b-green">Calculado automáticamente</span></div>
+            <div class="card-body">
+              <div class="chart-wrap" style="padding:0 0 8px;">
+                <div class="chart-bars" id="projBars" style="height:180px;"></div>
+                <div class="chart-labels" id="projLabels"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INDICES -->
+        <div class="tab-pane" id="tIndices">
+          <div class="g3">
+            <div class="card"><div class="card-body" style="text-align:center;padding:28px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">Liquidez Corriente</div><div style="font-size:40px;font-weight:800;color:var(--green)">2.21</div><div class="badge b-green" style="margin:10px auto;display:inline-flex">✓ Óptimo &gt; 1.5</div></div></div>
+            <div class="card"><div class="card-body" style="text-align:center;padding:28px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">Endeudamiento</div><div style="font-size:40px;font-weight:800;color:var(--yellow)">0.39</div><div class="badge b-yellow" style="margin:10px auto;display:inline-flex">⚠ Moderado &lt; 0.6</div></div></div>
+            <div class="card"><div class="card-body" style="text-align:center;padding:28px"><div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:10px">Rentabilidad ROE</div><div style="font-size:40px;font-weight:800;color:var(--green)">18.4%</div><div class="badge b-green" style="margin:10px auto;display:inline-flex">✓ Rentable &gt; 12%</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ RIESGO ──────────────────────────────────────────── -->
+      <div class="view" id="v-riesgo">
+        <div class="page-header">
+          <div><div class="page-title">Calificación de Riesgo Automatizada</div><div class="page-sub">RF-09 · Score automático con variables financieras y sectoriales</div></div>
+        </div>
+        <div class="g12">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Desglose por Variable</div></div>
+            <div class="card-body">
+              <div class="bar-rows">
+                <div class="br-row"><div class="br-lbl">Financiero</div><div class="br-track"><div class="br-fill" style="width:80%;background:linear-gradient(90deg,#059669,#10B981)"></div></div><div class="br-val" style="color:var(--green)">80/100</div></div>
+                <div class="br-row"><div class="br-lbl">Historial CC</div><div class="br-track"><div class="br-fill" style="width:90%;background:linear-gradient(90deg,#059669,#10B981)"></div></div><div class="br-val" style="color:var(--green)">90/100</div></div>
+                <div class="br-row"><div class="br-lbl">Sectorial</div><div class="br-track"><div class="br-fill" style="width:65%;background:linear-gradient(90deg,var(--yellow),#F59E0B)"></div></div><div class="br-val" style="color:var(--yellow)">65/100</div></div>
+                <div class="br-row"><div class="br-lbl">Garantías</div><div class="br-track"><div class="br-fill" style="width:75%;background:linear-gradient(90deg,#059669,#10B981)"></div></div><div class="br-val" style="color:var(--green)">75/100</div></div>
+                <div class="br-row"><div class="br-lbl">Clima/Entorno</div><div class="br-track"><div class="br-fill" style="width:50%;background:linear-gradient(90deg,var(--yellow),#EF4444)"></div></div><div class="br-val" style="color:var(--yellow)">50/100</div></div>
+              </div>
+              <div class="alert a-warn mt16"><div class="alert-ico">🌦</div><div class="alert-text"><strong>Alerta climática:</strong> El historial de sequías en la zona reduce el score sectorial. Se recomienda revisar cobertura de garantías.</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Score Global</div></div>
+            <div class="card-body">
+              <div class="risk-gauge">
+                <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);margin-bottom:8px">Puntuación Automática</div>
+                <div class="risk-score-num" style="color:var(--yellow)">724</div>
+                <div class="risk-score-lbl" style="color:var(--yellow)">Riesgo Moderado</div>
+                <div style="width:100%;margin-top:16px;">
+                  <div class="risk-track"><div class="risk-cursor" style="left:65%"></div></div>
+                  <div class="risk-ticks"><span style="color:var(--green)">Bajo</span><span style="color:var(--text-muted)">Moderado</span><span style="color:var(--red)">Alto</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ GARANTÍAS ───────────────────────────────────────── -->
+      <div class="view" id="v-garantias">
+        <div class="page-header">
+          <div><div class="page-title">Gestión de Garantías</div><div class="page-sub">Conexión dinámica entre valor de garantía y capacidad de pago real</div></div>
+          <button class="btn btn-primary" onclick="openModal('mGar')">➕ Nueva Garantía</button>
+        </div>
+        <div class="g21">
+          <div class="card">
+            <div class="card-header"><div class="card-title">Garantías Registradas</div></div>
+            <div class="card-body p0">
+              <table>
+                <thead><tr><th>Tipo</th><th>Descripción</th><th>Valor Bs.</th><th>Cobertura</th><th>Estado</th></tr></thead>
+                <tbody>
+                  <tr><td>🏗 Hipotecaria</td><td><b>Predio "El Ceibo" — 250 has</b><br><small style="color:var(--text-muted)">Santa Cruz, Warnes</small></td><td style="font-family:'IBM Plex Mono',monospace">1.800.000</td><td style="font-family:'IBM Plex Mono',monospace;color:var(--green);font-weight:700">212%</td><td><span class="badge b-green">Vigente</span></td></tr>
+                  <tr><td>🚜 Prendaria</td><td><b>Cosechadora John Deere S680</b><br><small style="color:var(--text-muted)">Año 2022, VIN: JD22-4590</small></td><td style="font-family:'IBM Plex Mono',monospace">380.000</td><td style="font-family:'IBM Plex Mono',monospace;color:var(--green);font-weight:700">45%</td><td><span class="badge b-green">Vigente</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><div class="card-title">Cobertura Total</div></div>
+            <div class="card-body">
+              <div class="coverage-big">
+                <div class="coverage-num">257%</div>
+                <div class="coverage-lbl">Cobertura sobre crédito solicitado</div>
+                <div class="badge b-green" style="margin:10px auto;display:inline-flex">✓ Óptima &gt; 150%</div>
+              </div>
+              <div class="info-box">El valor de las garantías se actualiza automáticamente con datos del avalúo y se relaciona con la capacidad de pago en tiempo real.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ PANEL ADMINISTRACIÓN ───────────────────────────── -->
+      <div class="view" id="v-admin">
+        <div class="page-header">
+          <div><div class="page-title">Panel de Administración</div><div class="page-sub">Back Office · Permisos, Auditoría & Motor de Reglas</div></div>
+        </div>
+
+        <div class="tabs" id="adminTabs">
+          <div class="tab active" onclick="swTab(this,'tPermisos')">🔐 Gestor de Permisos</div>
+          <div class="tab" onclick="swTab(this,'tAuditoria')">🔍 Visor de Auditoría</div>
+          <div class="tab" onclick="swTab(this,'tMotor')">⚙ Motor de Reglas</div>
+        </div>
+
+        <!-- PERMISOS -->
+        <div class="tab-pane active" id="tPermisos">
+          <div class="g21">
+            <div class="card">
+              <div class="card-header"><div class="card-title">Matriz de Permisos por Rol</div><span class="badge b-blue">RF-07</span></div>
+              <div class="card-body p0">
+                <div class="perm-table">
+                  <div class="perm-row hdr"><div>Módulo</div><div class="perm-col">Administrador</div><div class="perm-col">Analista</div><div class="perm-col">Comité</div><div class="perm-col">Auditor</div><div class="perm-col">Solo Vista</div></div>
+                  <div class="perm-row"><div>📋 Solicitudes</div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div></div>
+                  <div class="perm-row"><div>🧮 Evaluación Fin.</div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div></div>
+                  <div class="perm-row"><div>📈 Riesgo & Score</div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div></div>
+                  <div class="perm-row"><div>🔍 Auditoría/Logs</div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div></div>
+                  <div class="perm-row"><div>⚙ Motor de Reglas</div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track on"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div><div class="perm-col"><div class="toggle-wrap" onclick="flipToggle(this)"><div class="toggle-track"><div class="toggle-knob"></div></div></div></div></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><div class="card-title">Usuarios del Sistema</div></div>
+              <div class="card-body" style="display:flex;flex-direction:column;gap:12px;">
+                <div style="display:flex;align-items:center;gap:10px;"><div class="avatar">MA</div><div style="flex:1"><div style="font-weight:600;font-size:13px">María Ávila</div><div style="font-size:11px;color:var(--text-muted)">Analista Crédito</div></div><div class="online"></div></div>
+                <div style="display:flex;align-items:center;gap:10px;"><div class="avatar green">RF</div><div style="flex:1"><div style="font-weight:600;font-size:13px">Roberto Flores</div><div style="font-size:11px;color:var(--text-muted)">Analista Senior</div></div></div>
+                <div style="display:flex;align-items:center;gap:10px;"><div class="avatar orange">CM</div><div style="flex:1"><div style="font-weight:600;font-size:13px">Carlos Mamani</div><div style="font-size:11px;color:var(--text-muted)">Comité Crédito</div></div></div>
+                <div style="display:flex;align-items:center;gap:10px;"><div class="avatar" style="background:linear-gradient(135deg,#7C3AED,#8B5CF6)">LA</div><div style="flex:1"><div style="font-weight:600;font-size:13px">Laura Arias</div><div style="font-size:11px;color:var(--text-muted)">Auditora Interna</div></div></div>
+                <div class="info-box" style="margin-top:8px;font-size:11px;"><strong>RNF-02:</strong> La plataforma soporta hasta <strong>500 usuarios concurrentes</strong> sin degradación.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AUDITORIA -->
+        <div class="tab-pane" id="tAuditoria">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Registro de Auditoría — Solo Lectura</div>
+              <div style="display:flex;gap:10px;align-items:center;">
+                <input class="inp" placeholder="🔍 Filtrar por usuario, operación..." style="width:260px;padding:8px 12px;">
+                <select class="sel" style="width:120px;padding:8px 10px;"><option>Todas</option><option>INSERT</option><option>UPDATE</option><option>DELETE</option></select>
+                <span class="badge b-green" style="font-family:'IBM Plex Mono',monospace">1.847 entradas</span>
+              </div>
+            </div>
+            <div class="card-body p0">
+              <div class="alert a-info" style="margin:16px 16px 0;border-radius:8px;"><div class="alert-ico">🔒</div><div class="alert-text"><strong>RF-06 — Logs inmutables:</strong> Este registro es de solo lectura. Ningún usuario puede modificar ni eliminar entradas. Hash encadenado garantiza integridad total.</div></div>
+              <div class="tbl-wrap" style="margin-top:12px;">
+                <table class="log-tbl">
+                  <thead><tr><th>Timestamp</th><th>Usuario</th><th>IP</th><th>Operación</th><th>Tabla</th><th>ID Registro</th><th>Hash</th></tr></thead>
+                  <tbody>
+                    <tr><td>2024-06-15 14:32:07</td><td>m.avila</td><td>192.168.1.45</td><td><span class="op-upd">UPDATE</span></td><td>solicitudes</td><td>SOL-2024-089</td><td style="color:var(--gray-400)">a3f7b2c9d1e4…</td></tr>
+                    <tr><td>2024-06-15 14:28:15</td><td>m.avila</td><td>192.168.1.45</td><td><span class="op-ins">INSERT</span></td><td>garantias</td><td>GAR-2024-045</td><td style="color:var(--gray-400)">9d2e1a4f7c3b…</td></tr>
+                    <tr><td>2024-06-15 13:55:42</td><td>c.mamani</td><td>192.168.1.72</td><td><span class="op-upd">UPDATE</span></td><td>solicitudes</td><td>SOL-2024-086</td><td style="color:var(--gray-400)">e8c3f5a1d9b2…</td></tr>
+                    <tr><td>2024-06-15 13:12:08</td><td>r.flores</td><td>192.168.1.58</td><td><span class="op-ins">INSERT</span></td><td>evaluaciones</td><td>EVA-2024-088</td><td style="color:var(--gray-400)">2b7d9e6c4f1a…</td></tr>
+                    <tr><td>2024-06-15 11:45:33</td><td>l.arias</td><td>192.168.1.91</td><td><span class="op-del">DELETE</span></td><td>borradores</td><td>DRF-2024-012</td><td style="color:var(--gray-400)">7f4a2c8e5b3d…</td></tr>
+                    <tr><td>2024-06-15 10:20:11</td><td>admin</td><td>192.168.1.10</td><td><span class="op-ins">INSERT</span></td><td>usuarios</td><td>USR-0042</td><td style="color:var(--gray-400)">3c9e7a1f4d8b…</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MOTOR DE REGLAS -->
+        <div class="tab-pane" id="tMotor">
+          <div class="alert a-info mb20"><div class="alert-ico">⚙</div><div class="alert-text"><strong>RNF-03 — Motor de Reglas:</strong> El administrador puede ajustar tasas, porcentajes y validaciones financieras <strong>sin necesidad de reprogramar</strong>. Los cambios se reflejan dinámicamente en todos los formularios.</div></div>
+
+          <div class="rule-card">
+            <div class="rule-header"><div class="rule-name">📊 Reglas de Calificación Crediticia</div><span class="badge b-green">Activa</span></div>
+            <div class="rule-inputs">
+              <div class="rule-field"><div class="rule-lbl">Score mínimo aprobación</div><input class="rule-inp" value="600"></div>
+              <div class="rule-field"><div class="rule-lbl">Score máximo riesgo alto</div><input class="rule-inp" value="500"></div>
+              <div class="rule-field"><div class="rule-lbl">Peso variable financiera (%)</div><input class="rule-inp" value="40"></div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-header"><div class="rule-name">💰 Parámetros de Tasas y Plazos</div><span class="badge b-green">Activa</span></div>
+            <div class="rule-inputs">
+              <div class="rule-field"><div class="rule-lbl">Tasa mínima Pyme (%)</div><input class="rule-inp" value="4.5"></div>
+              <div class="rule-field"><div class="rule-lbl">Tasa máxima Pyme (%)</div><input class="rule-inp" value="9.0"></div>
+              <div class="rule-field"><div class="rule-lbl">Plazo máximo (meses)</div><input class="rule-inp" value="120"></div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-header"><div class="rule-name">🌾 Supuestos Agrícolas por Defecto</div><span class="badge b-green">Activa</span></div>
+            <div class="rule-inputs">
+              <div class="rule-field"><div class="rule-lbl">Precio ref. quintal soya (Bs.)</div><input class="rule-inp" value="295"></div>
+              <div class="rule-field"><div class="rule-lbl">Factor descuento sequía (%)</div><input class="rule-inp" value="30"></div>
+              <div class="rule-field"><div class="rule-lbl">Cobertura garantía mínima (%)</div><input class="rule-inp" value="150"></div>
+            </div>
+          </div>
+
+          <div class="rule-card">
+            <div class="rule-header"><div class="rule-name">🐄 Parámetros Ciclo Pecuario</div><span class="badge b-green">Activa</span></div>
+            <div class="rule-inputs">
+              <div class="rule-field"><div class="rule-lbl">Natalidad hato estimada (%)</div><input class="rule-inp" value="65"></div>
+              <div class="rule-field"><div class="rule-lbl">Mortalidad proyectada (%)</div><input class="rule-inp" value="5"></div>
+              <div class="rule-field"><div class="rule-lbl">Precio kg. ganado en pie (Bs.)</div><input class="rule-inp" value="18.5"></div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+            <button class="btn btn-outline">Restaurar valores por defecto</button>
+            <button class="btn btn-primary">💾 Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ▸ REPORTES ────────────────────────────────────────── -->
+      <div class="view" id="v-reportes">
+        <div class="page-header">
+          <div><div class="page-title">Reportes & Exportación</div><div class="page-sub">RF-05 · Generación automática PDF y Excel sin pérdida de información</div></div>
+        </div>
+        <div class="g3 mb20">
+          <div class="card" style="cursor:pointer" onclick="openModal('mComite')">
+            <div class="card-body" style="text-align:center;padding:32px">
+              <div style="font-size:40px;margin-bottom:12px">📄</div>
+              <div style="font-size:15px;font-weight:700;color:var(--blue-900);margin-bottom:6px">Resumen Comité</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Informe ejecutivo para presentación al comité de crédito</div>
+              <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center">Generar PDF</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="text-align:center;padding:32px">
+              <div style="font-size:40px;margin-bottom:12px">📊</div>
+              <div style="font-size:15px;font-weight:700;color:var(--blue-900);margin-bottom:6px">Cartera Analítica</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Estado completo de la cartera con filtros por sector y estado</div>
+              <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center">Exportar Excel</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body" style="text-align:center;padding:32px">
+              <div style="font-size:40px;margin-bottom:12px">🔍</div>
+              <div style="font-size:15px;font-weight:700;color:var(--blue-900);margin-bottom:6px">Reporte Auditoría</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">Log completo e inalterable de todas las operaciones</div>
+              <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="go('admin',null)">Ver Logs</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">API REST — Integración CORE Bancario</div><span class="badge b-green">RF-04 · JWT Auth</span></div>
+          <div class="card-body">
+            <div class="g2">
+              <div>
+                <div class="info-box mb20"><strong>RF-04:</strong> Comunicación con el CORE bancario vía API-REST, autenticación JWT, respuestas JSON, compatible HATEOAS (RNF-04).</div>
+                <div style="background:var(--gray-800);border-radius:10px;padding:16px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:#E2E8F0;line-height:1.9;">
+                  <span style="color:#60A5FA">POST</span> /api/v1/credito/solicitud<br>
+                  <span style="color:#FBBF24">Authorization:</span> Bearer &lt;JWT&gt;<br>
+                  <span style="color:#FBBF24">Content-Type:</span> application/json<br><br>
+                  <span style="color:#34D399">// 201 Created</span><br>
+                  {<br>&nbsp;&nbsp;<span style="color:#FBBF24">"id"</span>: <span style="color:#86EFAC">"SOL-2024-089"</span>,<br>&nbsp;&nbsp;<span style="color:#FBBF24">"status"</span>: <span style="color:#86EFAC">"created"</span><br>}
+                </div>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);margin-bottom:12px">Estado de Endpoints</div>
+                <div class="checklist">
+                  <div class="chk-item done"><div class="chk-box">✓</div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;flex:1">POST /credito/solicitud</div><div class="chk-tag">Activo</div></div>
+                  <div class="chk-item done"><div class="chk-box">✓</div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;flex:1">GET /credito/{id}/estado</div><div class="chk-tag">Activo</div></div>
+                  <div class="chk-item done"><div class="chk-box">✓</div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;flex:1">PUT /garantias/{id}</div><div class="chk-tag">Activo</div></div>
+                  <div class="chk-item"><div class="chk-box"></div><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;flex:1">POST /desembolso/aprobar</div><div class="chk-tag pending">En dev.</div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODAL: Resumen Comité -->
+<div class="modal-overlay" id="mComite">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title">📄 Resumen Comité — SOL-2024-089</div><button class="modal-close" onclick="closeModal('mComite')">✕</button></div>
+    <div class="modal-body">
+      <div style="background:var(--blue-50);border:1px solid var(--blue-100);border-radius:10px;padding:18px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--blue-900);margin-bottom:2px">BANCO DE DESARROLLO PRODUCTIVO S.A.M.</div>
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:16px">Resumen Ejecutivo — Comité de Crédito</div>
+        <div class="g2" style="gap:10px;font-size:13px;margin-bottom:14px;">
+          <div><span style="color:var(--text-muted)">Solicitante:</span><br><b>Agropecuaria El Ceibo S.R.L.</b></div>
+          <div><span style="color:var(--text-muted)">Monto:</span><br><b style="font-family:'IBM Plex Mono',monospace">Bs. 850.000,00</b></div>
+          <div><span style="color:var(--text-muted)">Score de Riesgo:</span><br><b style="color:var(--yellow)">724 — Moderado</b></div>
+          <div><span style="color:var(--text-muted)">Cobertura Garantía:</span><br><b style="color:var(--green)">257%</b></div>
+        </div>
+        <div class="alert a-success" style="margin-bottom:0"><div class="alert-ico">✅</div><div class="alert-text"><strong>Recomendación:</strong> APROBAR. El flujo cubre la deuda incluso en escenario de sequía moderada (-30%). Garantías óptimas.</div></div>
+      </div>
+      <div class="info-box"><strong>RF-05:</strong> Este reporte se genera automáticamente. Exportable en PDF o Excel sin pérdida de información.</div>
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('mComite')">Cancelar</button><button class="btn btn-outline">📊 Excel</button><button class="btn btn-primary">📄 Exportar PDF</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     RF-04 — EVALUACIÓN SECTORIAL (Agrícola / Pecuaria)
+     ══════════════════════════════════════════════════════════ -->
+<div class="view" id="v-sectorial">
+  <div class="view-hdr">
+    <div><div class="view-title">🌾 Evaluación Productiva Sectorial</div><div class="view-sub">RF-04 · Análisis especializado por ciclo biológico y estacionalidad</div></div>
+    <div class="actions"><button class="btn btn-outline btn-sm">📄 Exportar PDF</button><button class="btn btn-primary btn-sm">💾 Guardar Evaluación</button></div>
+  </div>
+
+  <!-- Selector de sector -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-hdr"><div class="card-title">Perfil del Sector Productivo</div></div>
+    <div class="card-body">
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:14px">Seleccione el sector para cargar el módulo especializado de evaluación:</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap">
+        <div class="sector-btn sel" onclick="selSectorView(this,'agri')" style="flex:1;min-width:160px;padding:18px;border:2px solid var(--blue-500);border-radius:10px;cursor:pointer;text-align:center;background:var(--blue-50)">
+          <div style="font-size:28px">🌾</div>
+          <div style="font-weight:700;margin-top:6px">Agrícola</div>
+          <div style="font-size:11px;color:var(--text-muted)">Soya, maíz, trigo, arroz</div>
+        </div>
+        <div class="sector-btn" onclick="selSectorView(this,'pec')" style="flex:1;min-width:160px;padding:18px;border:2px solid var(--gray-200);border-radius:10px;cursor:pointer;text-align:center">
+          <div style="font-size:28px">🐄</div>
+          <div style="font-weight:700;margin-top:6px">Pecuario</div>
+          <div style="font-size:11px;color:var(--text-muted)">Ganadería, hato bovino</div>
+        </div>
+        <div class="sector-btn" onclick="selSectorView(this,'mix')" style="flex:1;min-width:160px;padding:18px;border:2px solid var(--gray-200);border-radius:10px;cursor:pointer;text-align:center">
+          <div style="font-size:28px">🏡</div>
+          <div style="font-weight:700;margin-top:6px">Mixto</div>
+          <div style="font-size:11px;color:var(--text-muted)">Agrícola + Pecuario</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Agrícola -->
+  <div id="panelAgri" style="display:block">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📐 Supuestos Agrícolas</div><span class="badge b-blue">Simulación de Escenarios</span></div>
+        <div class="card-body">
+          <div class="form-group" style="margin-bottom:12px"><label class="lbl">Cultivo Principal</label><select class="sel"><option>Soya (verano)</option><option>Soya (invierno)</option><option>Maíz</option><option>Girasol</option><option>Trigo</option><option>Arroz</option></select></div>
+          <div class="form-row cols-2" style="margin-bottom:12px">
+            <div class="form-group"><label class="lbl">Superficie (ha)</label><input class="inp" value="250" style="font-family:'IBM Plex Mono',monospace"></div>
+            <div class="form-group"><label class="lbl">Rend. Esperado (TM/ha)</label><input class="inp" value="2.80" style="font-family:'IBM Plex Mono',monospace"></div>
+          </div>
+          <div class="form-row cols-2">
+            <div class="form-group"><label class="lbl">Precio Soya (USD/TM)</label><input class="inp" value="385" style="font-family:'IBM Plex Mono',monospace"></div>
+            <div class="form-group"><label class="lbl">Escenario Estrés (%)</label><input class="inp" value="-30%" style="font-family:'IBM Plex Mono',monospace"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📊 Proyección de Ingresos</div></div>
+        <div class="card-body">
+          <table class="tbl" style="font-size:13px">
+            <thead><tr><th>Escenario</th><th>Producción (TM)</th><th>Ingreso (Bs.)</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge b-green">Optimista</span></td><td style="font-family:'IBM Plex Mono',monospace">700</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--green)">1.869.000</td></tr>
+              <tr style="background:var(--blue-50)"><td><span class="badge b-blue">Base</span></td><td style="font-family:'IBM Plex Mono',monospace">700</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">1.869.000</td></tr>
+              <tr><td><span class="badge b-red">Estrés (-30%)</span></td><td style="font-family:'IBM Plex Mono',monospace">490</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700;color:var(--red)">1.308.300</td></tr>
+            </tbody>
+          </table>
+          <div style="margin-top:14px;padding:12px;background:var(--yellow-light);border-radius:8px;font-size:12px;color:var(--yellow)">
+            ⚠️ Capacidad de pago en estrés: <b>Bs. 45.210/mes</b> — Cubre cuota proyectada.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">📅 Calendario de Costos por Ciclo</div></div>
+      <div class="card-body" style="overflow-x:auto">
+        <table class="tbl" style="font-size:12px;min-width:700px">
+          <thead><tr><th>Actividad</th><th>Meses</th><th>Costo/ha (Bs.)</th><th>Total (Bs.)</th><th>Financiable</th></tr></thead>
+          <tbody>
+            <tr><td>Preparación de suelo</td><td>Sep–Oct</td><td style="font-family:'IBM Plex Mono',monospace">480</td><td style="font-family:'IBM Plex Mono',monospace">120.000</td><td><span class="badge b-green">✓ Sí</span></td></tr>
+            <tr><td>Semilla + siembra</td><td>Nov</td><td style="font-family:'IBM Plex Mono',monospace">620</td><td style="font-family:'IBM Plex Mono',monospace">155.000</td><td><span class="badge b-green">✓ Sí</span></td></tr>
+            <tr><td>Agroquímicos</td><td>Nov–Ene</td><td style="font-family:'IBM Plex Mono',monospace">890</td><td style="font-family:'IBM Plex Mono',monospace">222.500</td><td><span class="badge b-green">✓ Sí</span></td></tr>
+            <tr><td>Cosecha</td><td>Mar–Abr</td><td style="font-family:'IBM Plex Mono',monospace">310</td><td style="font-family:'IBM Plex Mono',monospace">77.500</td><td><span class="badge b-yellow">Parcial</span></td></tr>
+            <tr style="background:var(--blue-50);font-weight:700"><td colspan="3">TOTAL COSTO CICLO</td><td style="font-family:'IBM Plex Mono',monospace">575.000</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel Pecuario -->
+  <div id="panelPec" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">🐄 Ciclo de Vida del Hato</div><span class="badge b-green">Proyección Automática</span></div>
+        <div class="card-body">
+          <div class="form-row cols-2" style="margin-bottom:12px">
+            <div class="form-group"><label class="lbl">Cabezas iniciales</label><input class="inp" value="120" style="font-family:'IBM Plex Mono',monospace"></div>
+            <div class="form-group"><label class="lbl">% Natalidad anual</label><input class="inp" value="65%" style="font-family:'IBM Plex Mono',monospace"></div>
+          </div>
+          <div class="form-row cols-2" style="margin-bottom:12px">
+            <div class="form-group"><label class="lbl">% Mortalidad</label><input class="inp" value="3%" style="font-family:'IBM Plex Mono',monospace"></div>
+            <div class="form-group"><label class="lbl">Precio novillos (Bs./cab.)</label><input class="inp" value="3.200" style="font-family:'IBM Plex Mono',monospace"></div>
+          </div>
+          <table class="tbl" style="font-size:12px;margin-top:12px">
+            <thead><tr><th>Año</th><th>Hato (cab.)</th><th>Ventas (cab.)</th><th>Ingreso (Bs.)</th></tr></thead>
+            <tbody>
+              <tr><td>Año 1</td><td style="font-family:'IBM Plex Mono',monospace">138</td><td style="font-family:'IBM Plex Mono',monospace">20</td><td style="font-family:'IBM Plex Mono',monospace">64.000</td></tr>
+              <tr><td>Año 2</td><td style="font-family:'IBM Plex Mono',monospace">155</td><td style="font-family:'IBM Plex Mono',monospace">28</td><td style="font-family:'IBM Plex Mono',monospace">89.600</td></tr>
+              <tr><td>Año 3</td><td style="font-family:'IBM Plex Mono',monospace">174</td><td style="font-family:'IBM Plex Mono',monospace">35</td><td style="font-family:'IBM Plex Mono',monospace">112.000</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📋 Valor de Garantía Pecuaria</div></div>
+        <div class="card-body">
+          <div style="padding:14px;background:var(--green-light);border-radius:8px;margin-bottom:12px">
+            <div style="font-size:11px;color:var(--green);font-weight:700;text-transform:uppercase;letter-spacing:1px">Valor actual del hato</div>
+            <div style="font-size:28px;font-weight:800;color:var(--green);font-family:'IBM Plex Mono',monospace">Bs. 384.000</div>
+            <div style="font-size:12px;color:var(--text-muted)">120 cabezas × Bs. 3.200</div>
+          </div>
+          <div style="padding:14px;background:var(--blue-50);border-radius:8px">
+            <div style="font-size:11px;color:var(--blue-600);font-weight:700;text-transform:uppercase;letter-spacing:1px">Cobertura de garantía</div>
+            <div style="font-size:28px;font-weight:800;color:var(--blue-700);font-family:'IBM Plex Mono',monospace">148%</div>
+            <div style="font-size:12px;color:var(--text-muted)">Sobre monto solicitado Bs. 260.000</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     RF-11 — SCORING CREDITICIO AUTOMÁTICO
+     ══════════════════════════════════════════════════════════ -->
+<div class="view" id="v-scoring">
+  <div class="view-hdr">
+    <div><div class="view-title">🎯 Calificación de Riesgo — Scoring Crediticio</div><div class="view-sub">RF-11 · Puntuación automática por variables sectoriales y financieras</div></div>
+    <div class="actions"><button class="btn btn-primary btn-sm" onclick="calcScoring()">⚡ Recalcular Score</button></div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:start">
+    <!-- Score principal -->
+    <div class="card" style="text-align:center">
+      <div class="card-hdr"><div class="card-title">Score Global</div></div>
+      <div class="card-body">
+        <div id="scoreMeter" style="position:relative;width:180px;height:90px;margin:0 auto 12px">
+          <svg viewBox="0 0 180 90" width="180" height="90">
+            <path d="M10,90 A80,80 0 0,1 170,90" fill="none" stroke="var(--gray-200)" stroke-width="18" stroke-linecap="round"/>
+            <path id="scoreArc" d="M10,90 A80,80 0 0,1 170,90" fill="none" stroke="var(--green)" stroke-width="18" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="62.8"/>
+            <text x="90" y="75" text-anchor="middle" font-size="28" font-weight="800" fill="var(--green)" font-family="IBM Plex Mono">748</text>
+            <text x="90" y="88" text-anchor="middle" font-size="11" fill="var(--text-muted)">de 1000</text>
+          </svg>
+        </div>
+        <div style="display:inline-block;background:var(--green-light);color:var(--green);font-weight:800;font-size:18px;padding:6px 20px;border-radius:8px;margin-bottom:10px">A — BAJO RIESGO</div>
+        <p style="font-size:12px;color:var(--text-muted)">Score calculado automáticamente según 6 variables ponderadas</p>
+      </div>
+    </div>
+
+    <!-- Variables de scoring -->
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Variables de Puntuación</div><span class="badge b-blue">Ponderación Automática</span></div>
+      <div class="card-body">
+        <table class="tbl" style="font-size:13px">
+          <thead><tr><th>Variable</th><th>Peso</th><th>Valor</th><th>Puntaje</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>Historial Crediticio</td><td>25%</td><td>Sin morosidad</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">250/250</td><td><span class="badge b-green">Excelente</span></td></tr>
+            <tr><td>Capacidad de Pago</td><td>25%</td><td>DSCR: 1.45x</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">210/250</td><td><span class="badge b-green">Bueno</span></td></tr>
+            <tr><td>Cobertura Garantía</td><td>20%</td><td>148%</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">180/200</td><td><span class="badge b-green">Adecuado</span></td></tr>
+            <tr><td>Experiencia Sectorial</td><td>15%</td><td>8 años</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">128/150</td><td><span class="badge b-blue">Normal</span></td></tr>
+            <tr><td>Estabilidad del Sector</td><td>10%</td><td>Precio soya estable</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">72/100</td><td><span class="badge b-yellow">Moderado</span></td></tr>
+            <tr><td>Relación BDP</td><td>5%</td><td>Cliente nuevo</td><td style="font-family:'IBM Plex Mono',monospace;font-weight:700">35/50</td><td><span class="badge b-yellow">Nuevo</span></td></tr>
+            <tr style="background:var(--blue-50);font-weight:800"><td colspan="3">SCORE TOTAL</td><td style="font-family:'IBM Plex Mono',monospace;color:var(--green)">748/1000</td><td><span class="badge b-green">A</span></td></tr>
+          </tbody>
+        </table>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px">
+          <div style="padding:10px;background:var(--green-light);border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--green);font-weight:700">A · 800–1000</div><div style="font-size:11px;color:var(--text-muted)">Bajo Riesgo</div></div>
+          <div style="padding:10px;background:var(--blue-50);border-radius:8px;text-align:center;border:2px solid var(--blue-500)"><div style="font-size:10px;color:var(--blue-600);font-weight:700">B · 600–799 ◄</div><div style="font-size:11px;color:var(--text-muted)">Normal</div></div>
+          <div style="padding:10px;background:var(--yellow-light);border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--yellow);font-weight:700">C · 400–599</div><div style="font-size:11px;color:var(--text-muted)">Moderado</div></div>
+          <div style="padding:10px;background:var(--red-light);border-radius:8px;text-align:center"><div style="font-size:10px;color:var(--red);font-weight:700">D · 0–399</div><div style="font-size:11px;color:var(--text-muted)">Alto Riesgo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-hdr"><div class="card-title">📋 Recomendación Automática del Sistema</div></div>
+    <div class="card-body">
+      <div style="padding:16px;background:var(--green-light);border-left:4px solid var(--green);border-radius:8px">
+        <div style="font-weight:700;color:var(--green);margin-bottom:6px">✅ APROBACIÓN RECOMENDADA — Sujeto a revisión del Comité</div>
+        <p style="font-size:13px;color:var(--text-muted)">El cliente presenta score <b>B (748/1000)</b>. Capacidad de pago demostrada con DSCR 1.45x. Se recomienda aprobar hasta <b>Bs. 260.000</b> a 5 años con garantía prendaria sobre hato ganadero (148% cobertura). Monitoreo trimestral recomendado.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     RF-12 — MONITOREO EN TIEMPO REAL
+     ══════════════════════════════════════════════════════════ -->
+<div class="view" id="v-monitoreo">
+  <div class="view-hdr">
+    <div><div class="view-title">📡 Monitoreo de Transacciones en Tiempo Real</div><div class="view-sub">RF-12 · Seguimiento del estado y tiempos de cada operación crediticia</div></div>
+    <div class="actions">
+      <div id="liveChip" style="display:flex;align-items:center;gap:6px;background:var(--green-light);color:var(--green);padding:6px 14px;border-radius:20px;font-size:12px;font-weight:700">
+        <div style="width:8px;height:8px;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite"></div> EN VIVO
+      </div>
+      <button class="btn btn-outline btn-sm">⚙ Configurar alertas</button>
+    </div>
+  </div>
+
+  <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+
+  <!-- KPIs en tiempo real -->
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px">
+    <div class="stat-card"><div class="stat-icon" style="background:var(--blue-100);color:var(--blue-700)">⏱</div><div class="stat-info"><div class="stat-label">Tiempo Promedio Aprobación</div><div class="stat-value" style="color:var(--blue-700)">4.2 días</div><div class="stat-change positive">↓ 1.8 días vs mes anterior</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--green-light);color:var(--green)">✅</div><div class="stat-info"><div class="stat-label">Solicitudes Aprobadas Hoy</div><div class="stat-value" style="color:var(--green)">7</div><div class="stat-change positive">+3 vs ayer</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--yellow-light);color:var(--yellow)">⚠️</div><div class="stat-info"><div class="stat-label">En Análisis (cuellos)</div><div class="stat-value" style="color:var(--yellow)">12</div><div class="stat-change">5 con más de 3 días</div></div></div>
+    <div class="stat-card"><div class="stat-icon" style="background:var(--red-light);color:var(--red)">🔴</div><div class="stat-info"><div class="stat-label">Alertas Activas</div><div class="stat-value" style="color:var(--red)">2</div><div class="stat-change negative">Requieren atención</div></div></div>
+  </div>
+
+  <!-- Feed de transacciones en vivo -->
+  <div style="display:grid;grid-template-columns:1fr 340px;gap:16px">
+    <div class="card">
+      <div class="card-hdr"><div class="card-title">Feed de Operaciones — En Curso</div><span class="badge b-green">● Actualizado ahora</span></div>
+      <div class="card-body" style="padding:0">
+        <table class="tbl" style="font-size:13px">
+          <thead><tr><th>Nro.</th><th>Cliente</th><th>Etapa Actual</th><th>Tiempo en Etapa</th><th>Analista</th><th>Alerta</th></tr></thead>
+          <tbody id="monitorFeed">
+            <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-089</td><td><b>Agropecuaria El Ceibo</b><br><small style="color:var(--text-muted)">Bs. 850.000 · Agrícola</small></td><td><span class="badge b-yellow">⏳ Eval. Financiera</span></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--yellow)">3d 04h</td><td>M. Ávila</td><td><span class="badge b-red">⚠ Retraso</span></td></tr>
+            <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-091</td><td><b>Granja Los Pinos</b><br><small style="color:var(--text-muted)">Bs. 320.000 · Pecuario</small></td><td><span class="badge b-blue">📋 Revisión Documental</span></td><td style="font-family:'IBM Plex Mono',monospace">1d 06h</td><td>R. Cossío</td><td><span class="badge b-green">✓ Normal</span></td></tr>
+            <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-092</td><td><b>Coop. Agric. Okinawa</b><br><small style="color:var(--text-muted)">Bs. 1.200.000 · Agrícola</small></td><td><span class="badge b-blue">🏦 Aprobación Comité</span></td><td style="font-family:'IBM Plex Mono',monospace">0d 14h</td><td>L. Pedraza</td><td><span class="badge b-green">✓ Normal</span></td></tr>
+            <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-094</td><td><b>Frigorífico San Pablo</b><br><small style="color:var(--text-muted)">Bs. 2.400.000 · BE</small></td><td><span class="badge b-yellow">🎯 Scoring</span></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--red)">4d 18h</td><td>D. Vargas</td><td><span class="badge b-red">⚠ Crítico</span></td></tr>
+            <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--blue-600)">SOL-096</td><td><b>Prod. Agrop. Norte</b><br><small style="color:var(--text-muted)">Bs. 480.000 · Pyme</small></td><td><span class="badge b-green">✅ Desembolso</span></td><td style="font-family:'IBM Plex Mono',monospace">0d 02h</td><td>T. Miranda</td><td><span class="badge b-green">✓ Normal</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Alertas -->
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-hdr"><div class="card-title">🚨 Alertas Activas</div><span class="badge b-red">2</span></div>
+        <div class="card-body">
+          <div style="padding:12px;background:var(--red-light);border-radius:8px;margin-bottom:10px;border-left:3px solid var(--red)">
+            <div style="font-weight:700;color:var(--red);font-size:12px">SOL-094 — Retraso Crítico</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Lleva 4d 18h en etapa Scoring. SLA excedido en 1d 18h.</div>
+            <button class="btn btn-primary btn-sm" style="margin-top:8px;width:100%">Reasignar Analista</button>
+          </div>
+          <div style="padding:12px;background:var(--yellow-light);border-radius:8px;border-left:3px solid var(--yellow)">
+            <div style="font-weight:700;color:var(--yellow);font-size:12px">SOL-089 — Retraso Moderado</div>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:4px">3d 04h en Eval. Financiera. SLA excedido en 4h.</div>
+            <button class="btn btn-outline btn-sm" style="margin-top:8px;width:100%">Ver Detalle</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hdr"><div class="card-title">📊 Throughput Hoy</div></div>
+        <div class="card-body">
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px">Ingresadas</span><b style="font-family:'IBM Plex Mono',monospace">9</b></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px">Aprobadas</span><b style="font-family:'IBM Plex Mono',monospace;color:var(--green)">7</b></div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:8px"><span style="font-size:13px">Observadas</span><b style="font-family:'IBM Plex Mono',monospace;color:var(--yellow)">1</b></div>
+          <div style="display:flex;justify-content:space-between"><span style="font-size:13px">Rechazadas</span><b style="font-family:'IBM Plex Mono',monospace;color:var(--red)">1</b></div>
+          <div style="height:4px;background:var(--gray-200);border-radius:2px;margin-top:12px;overflow:hidden">
+            <div style="height:100%;width:78%;background:var(--green);border-radius:2px"></div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:4px;text-align:right">78% tasa de aprobación</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     RF-08 — AUDITORÍA & LOGS
+     ══════════════════════════════════════════════════════════ -->
+<div class="view" id="v-auditoria">
+  <div class="view-hdr">
+    <div><div class="view-title">🔒 Auditoría & Logs del Sistema</div><div class="view-sub">RF-08 · Registro inalterable (WORM) de toda inserción, modificación y eliminación</div></div>
+    <div class="actions"><button class="btn btn-outline btn-sm">📊 Exportar CSV</button><button class="btn btn-outline btn-sm">📄 Exportar PDF</button></div>
+  </div>
+
+  <!-- Filtros -->
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-body" style="padding:12px">
+      <div class="form-row cols-4" style="margin-bottom:0;align-items:flex-end;gap:10px">
+        <div class="form-group" style="margin-bottom:0"><label class="lbl">Fecha desde</label><input class="inp" type="date" value="2024-06-01"></div>
+        <div class="form-group" style="margin-bottom:0"><label class="lbl">Fecha hasta</label><input class="inp" type="date" value="2024-06-19"></div>
+        <div class="form-group" style="margin-bottom:0"><label class="lbl">Tipo de Acción</label><select class="sel"><option>Todos</option><option>INSERT</option><option>UPDATE</option><option>DELETE</option><option>LOGIN</option><option>EXPORT</option></select></div>
+        <div class="form-group" style="margin-bottom:0"><label class="lbl">Usuario</label><select class="sel"><option>Todos</option><option>admin</option><option>m.avila</option><option>r.cossio</option></select></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">Registro de Eventos</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:11px;color:var(--text-muted)">Registros protegidos:</span>
+        <span class="badge b-green">🔐 WORM Activo</span>
+      </div>
+    </div>
+    <div class="card-body" style="padding:0">
+      <table class="tbl" style="font-size:12px">
+        <thead><tr><th>#</th><th>Timestamp</th><th>Usuario</th><th>IP</th><th>Acción</th><th>Tabla / Entidad</th><th>Descripción</th><th>Hash</th></tr></thead>
+        <tbody>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4821</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-19 09:42:11</td><td><b>m.avila</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.45</td><td><span class="badge b-blue">UPDATE</span></td><td>solicitudes / SOL-089</td><td>Modificó etapa: "Revisión" → "Eval. Financiera"</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">a3f8…c291</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4820</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-19 09:38:04</td><td><b>r.cossio</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.62</td><td><span class="badge b-green">INSERT</span></td><td>documentos / SOL-091</td><td>Subió archivo: "Balance_General_2023.pdf"</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">7b2e…d104</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4819</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-19 09:15:33</td><td><b>admin</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.10</td><td><span class="badge b-yellow">LOGIN</span></td><td>usuarios / admin</td><td>Inicio de sesión exitoso</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">9c4a…e832</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4818</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-18 17:52:08</td><td><b>l.pedraza</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.78</td><td><span class="badge b-blue">EXPORT</span></td><td>reportes / SOL-092</td><td>Generó Resumen Comité en PDF</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">f1d3…a507</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4817</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-18 16:30:21</td><td><b>d.vargas</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.91</td><td><span class="badge b-green">INSERT</span></td><td>solicitudes / SOL-094</td><td>Creó nueva solicitud: Frigorífico San Pablo</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">2e9b…c618</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4816</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-18 15:11:44</td><td><b>admin</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.10</td><td><span class="badge b-red">DELETE</span></td><td>usuarios / t.miranda_bk</td><td>Eliminó usuario duplicado (backup)</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">5a7c…f293</td></tr>
+          <tr><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">4815</td><td style="font-family:'IBM Plex Mono',monospace;white-space:nowrap">2024-06-18 14:02:17</td><td><b>m.avila</b></td><td style="font-family:'IBM Plex Mono',monospace;color:var(--text-muted)">192.168.1.45</td><td><span class="badge b-blue">UPDATE</span></td><td>scoring / SOL-089</td><td>Recalculó score: 701 → 748 (ajuste manual aprobado)</td><td style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-muted)">3d1f…b049</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:12px;color:var(--text-muted)">Mostrando 7 de <b>4.821</b> registros</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-outline btn-sm">← Anterior</button>
+        <button class="btn btn-outline btn-sm">Siguiente →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Garantía -->
+<div class="modal-overlay" id="mGar">
+  <div class="modal">
+    <div class="modal-hdr"><div class="modal-title">🏠 Nueva Garantía</div><button class="modal-close" onclick="closeModal('mGar')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row"><div class="form-group"><label class="lbl">Tipo de Garantía <span class="req">*</span></label><select class="sel"><option>Hipotecaria</option><option>Prendaria — Maquinaria</option><option>Prendaria — Hato Ganadero</option><option>Aval Personal</option></select></div></div>
+      <div class="form-row cols-2"><div class="form-group"><label class="lbl">Valor Avalúo (Bs.) <span class="req">*</span></label><input class="inp" placeholder="0.00" style="font-family:'IBM Plex Mono',monospace"></div><div class="form-group"><label class="lbl">Valor Ejecución (Bs.)</label><input class="inp" placeholder="0.00" style="font-family:'IBM Plex Mono',monospace"></div></div>
+      <div class="form-row"><div class="form-group"><label class="lbl">Descripción</label><input class="inp" placeholder="Ej: Predio agrícola, 250 has, Santa Cruz..."></div></div>
+    </div>
+    <div class="modal-ftr"><button class="btn btn-outline" onclick="closeModal('mGar')">Cancelar</button><button class="btn btn-primary" onclick="closeModal('mGar')">💾 Registrar</button></div>
+  </div>
+</div>
+
+<script>
+// ─── LOGIN ─────────────────────────────────────────────────
+let attempts = 0;
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPwd').value.trim();
+  if(u && p){
+    document.getElementById('screen-login').style.display='none';
+    document.getElementById('app').classList.add('show');
+    initCharts();
+  } else {
+    attempts++;
+    const ban = document.getElementById('errBanner');
+    const msg = document.getElementById('errMsg');
+    ban.classList.add('show');
+    if(attempts>=3){
+      msg.textContent='🚫 Acceso bloqueado. Contacte al administrador del sistema.';
+      document.querySelector('.btn-login').disabled=true;
+      document.querySelector('.btn-login').style.opacity='.5';
+    } else {
+      msg.textContent=`Credenciales incorrectas. Intentos restantes: ${3-attempts}`;
+    }
+    document.getElementById('loginPwd').classList.add('err');
+  }
+}
+function togglePwd(){
+  const f=document.getElementById('loginPwd');
+  f.type=f.type==='password'?'text':'password';
+}
+function logout(){
+  document.getElementById('app').classList.remove('show');
+  document.getElementById('screen-login').style.display='flex';
+  attempts=0;
+  document.querySelector('.btn-login').disabled=false;
+  document.querySelector('.btn-login').style.opacity='1';
+  document.getElementById('errBanner').classList.remove('show');
+  document.getElementById('loginPwd').classList.remove('err');
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Enter' && document.getElementById('screen-login').style.display!=='none') doLogin(); });
+
+// ─── NAV ───────────────────────────────────────────────────
+function go(id, el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const v=document.getElementById('v-'+id);
+  if(v) v.classList.add('active');
+  if(el) el.classList.add('active');
+  else document.querySelectorAll('.nav-item').forEach(n=>{ if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes("'"+id+"'")) n.classList.add('active'); });
+  const labels={dashboard:'Dashboard',solicitudes:'Solicitudes',nueva:'Nueva Solicitud',financiero:'Evaluación Financiera',riesgo:'Calificación de Riesgo',sectorial:'Evaluación Sectorial',scoring:'Scoring Crediticio',garantias:'Garantías',monitoreo:'Monitoreo en Tiempo Real',auditoria:'Auditoría & Logs',admin:'Panel Administración',reportes:'Reportes & Exportación'};
+  document.getElementById('bcCurrent').textContent=labels[id]||id;
+}
+
+// ─── SIDEBAR COLLAPSE ──────────────────────────────────────
+function collapseNav(){
+  const s=document.getElementById('sidebar');
+  s.classList.toggle('collapsed');
+}
+
+// ─── TABS ──────────────────────────────────────────────────
+function swTab(el, contentId){
+  const container = el.closest('.view') || document;
+  container.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  container.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  const pane=document.getElementById(contentId);
+  if(pane) pane.classList.add('active');
+}
+
+// ─── OFFLINE ───────────────────────────────────────────────
+let offline=false;
+function toggleOffline(){
+  offline=!offline;
+  const bar=document.getElementById('offlineBar');
+  const chip=document.getElementById('statusChip');
+  bar.classList.toggle('show',offline);
+  chip.className='status-chip'+(offline?' offline':'');
+  chip.innerHTML='<div class="status-dot"></div>'+(offline?'Sin conexión':'En línea');
+}
+
+// ─── MODALS ────────────────────────────────────────────────
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+// ─── CHECKLIST ─────────────────────────────────────────────
+function toggleChk(el){
+  if(el.classList.contains('locked')) return;
+  el.classList.toggle('done');
+  const box=el.querySelector('.chk-box');
+  const tag=el.querySelector('.chk-tag');
+  if(el.classList.contains('done')){ box.textContent='✓'; tag.textContent='Completo'; tag.className='chk-tag'; }
+  else { box.textContent=''; tag.textContent='Pendiente'; tag.className='chk-tag pending'; }
+}
+
+// ─── SECTOR ────────────────────────────────────────────────
+function selSector(el){
+  document.querySelectorAll('.sector-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  const isPecuario=el.querySelector('.sector-name').textContent==='Pecuario';
+  const agri=document.getElementById('agriExtra');
+  if(agri) agri.style.display=isPecuario?'none':'block';
+}
+
+// ─── TOGGLE PERM ───────────────────────────────────────────
+function flipToggle(wrap){
+  const track=wrap.querySelector('.toggle-track');
+  track.classList.toggle('on');
+}
+
+// ─── UPLOAD ────────────────────────────────────────────────
+function simulateUpload(){
+  const list=document.getElementById('fileList');
+  const exts=['pdf','xlsx','jpg','docx'];
+  const names=['Contrato_','Balance_','Garantia_','Solicitud_'];
+  const name=names[Math.floor(Math.random()*names.length)]+(Date.now()%10000);
+  const ext=exts[Math.floor(Math.random()*exts.length)];
+  const size=(Math.random()*4+0.5).toFixed(1);
+  const item=document.createElement('div');
+  item.className='file-item';
+  item.innerHTML=`<div class="file-ico">📄</div><div class="file-info"><div class="file-name">${name}.${ext}</div><div class="file-size">Subiendo…</div></div><div class="file-ok" style="color:var(--yellow)">⏳</div>`;
+  list.appendChild(item);
+  setTimeout(()=>{ item.querySelector('.file-ok').textContent='✓ Verificado'; item.querySelector('.file-ok').style.color='var(--green)'; item.querySelector('.file-size').textContent=`${size} MB · Subido ahora`; },1400);
+}
+
+// ─── CHARTS ────────────────────────────────────────────────
+function initCharts(){
+  renderFlujoChart();
+  renderProjChart();
+}
+
+function renderFlujoChart(){
+  const container=document.getElementById('flujoBars');
+  const labels=document.getElementById('flujoLabels');
+  if(!container) return;
+  const months=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const actual=[0,0,120,890,650,320,0,0,180,960,720,380];
+  const stress=[0,0,84,623,455,224,0,0,126,672,504,266];
+  const max=Math.max(...actual);
+  container.innerHTML='';
+  labels.innerHTML='';
+  months.forEach((m,i)=>{
+    const g=document.createElement('div'); g.className='c-bar-group';
+    const b1=document.createElement('div'); b1.className='c-bar actual'; b1.style.height=((actual[i]/max)*140+2)+'px';
+    b1.title=`Real: Bs. ${actual[i].toLocaleString()}k`;
+    const b2=document.createElement('div'); b2.className='c-bar projected'; b2.style.height=((stress[i]/max)*140+2)+'px';
+    b2.title=`Estrés: Bs. ${stress[i].toLocaleString()}k`;
+    g.appendChild(b1); g.appendChild(b2); container.appendChild(g);
+    const l=document.createElement('div'); l.className='c-lbl'; l.textContent=m; labels.appendChild(l);
+  });
+}
+
+function renderProjChart(){
+  const c=document.getElementById('projBars');
+  const l=document.getElementById('projLabels');
+  if(!c) return;
+  const years=['Año 1','Año 2','Año 3','Año 4','Año 5'];
+  const vals=[2.3,2.9,3.4,3.8,4.2];
+  const max=4.2;
+  c.innerHTML=''; l.innerHTML='';
+  years.forEach((y,i)=>{
+    const b=document.createElement('div'); b.className='c-bar actual'; b.style.height=((vals[i]/max)*160)+'px'; b.style.flex='1';
+    b.title=`Bs. ${vals[i]}M`; c.appendChild(b);
+    const lb=document.createElement('div'); lb.className='c-lbl'; lb.textContent=y; l.appendChild(lb);
+  });
+}
+
+// ─── SECTORIAL ─────────────────────────────────────────────
+function selSectorView(el, sector) {
+  document.querySelectorAll('.sector-btn').forEach(b=>{
+    b.style.border='2px solid var(--gray-200)';
+    b.style.background='';
+  });
+  el.style.border='2px solid var(--blue-500)';
+  el.style.background='var(--blue-50)';
+  document.getElementById('panelAgri').style.display=(sector==='agri'||sector==='mix')?'block':'none';
+  document.getElementById('panelPec').style.display=(sector==='pec'||sector==='mix')?'block':'none';
+}
+
+// ─── SCORING ───────────────────────────────────────────────
+function calcScoring(){
+  const arc=document.getElementById('scoreArc');
+  if(!arc) return;
+  // Simulate recalculation animation
+  arc.style.transition='stroke-dashoffset 1s ease';
+  arc.style.strokeDashoffset='80';
+  setTimeout(()=>{ arc.style.strokeDashoffset='62.8'; }, 1000);
+}
+
+</script>
+</body>
+</html>
