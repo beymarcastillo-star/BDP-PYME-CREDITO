@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HU-02 | Auditoría del sistema</title>
+  <style>
+    /* ── Paleta Grupo 2 ── */
+    :root {
+      --morado-oscuro: #1A0D4B;
+      --magenta:       #C11262;
+      --lavanda:       #A93586;
+      --azul-marino:   #0F205D;
+      --blanco:        #FFFFFF;
+      --gris-oscuro:   #333333;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--morado-oscuro);
+      color: var(--blanco);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--azul-marino);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--magenta);
+    }
+    header h1 { font-size: 20px; font-weight: 600; }
+    header span {
+      background: var(--magenta);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    main { padding: 32px; max-width: 1000px; margin: 0 auto; }
+
+    .info-badge {
+      background: var(--azul-marino);
+      border-left: 4px solid var(--lavanda);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 20px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .info-badge strong { color: var(--blanco); }
+
+    .card {
+      background: var(--azul-marino);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(169,53,134,0.3);
+    }
+    .card h2 {
+      font-size: 16px;
+      color: var(--lavanda);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    thead tr { background: rgba(193,18,98,0.25); }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--magenta);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.07); }
+    tbody tr:hover { background: rgba(255,255,255,0.05); }
+    tbody td { padding: 12px 16px; color: #ddd; }
+
+    .badge-accion {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-login  { background: rgba(169,53,134,0.3); color: #d88ecf; }
+    .badge-update { background: rgba(15,32,93,0.6);   color: #9bb3f5; }
+    .badge-delete { background: rgba(193,18,98,0.3);  color: #f08aaa; }
+
+    .worm-notice {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(193,18,98,0.12);
+      border: 1px solid rgba(193,18,98,0.4);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      color: #f08aaa;
+      margin-top: 16px;
+    }
+
+    .btn-exportar {
+      background: var(--magenta);
+      color: var(--blanco);
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: opacity 0.2s;
+    }
+    .btn-exportar:hover { opacity: 0.85; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: rgba(255,255,255,0.3);
+      font-size: 12px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>📋 Auditoría del sistema</h1>
+    <span>HU-02 · Grupo 2 — Abygail &amp; Beimar</span>
+  </header>
+
+  <main>
+    <div class="info-badge">
+      <strong>Historia de usuario:</strong> Como auditor, quiero un registro inalterable de acciones del sistema.<br>
+      <strong>Criterio de aceptación:</strong> Registro automático de ID, fecha y acción en base de datos (WORM).
+    </div>
+
+    <div class="card">
+      <h2>🔒 Registro de acciones (solo lectura — WORM)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>#ID</th>
+            <th>Usuario</th>
+            <th>Acción</th>
+            <th>Fecha y hora</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>001</td>
+            <td>ana.gomez</td>
+            <td><span class="badge-accion badge-login">LOGIN</span></td>
+            <td>2026-03-26 08:14:02</td>
+          </tr>
+          <tr>
+            <td>002</td>
+            <td>carlos.rios</td>
+            <td><span class="badge-accion badge-update">ACTUALIZAR_SOLICITUD</span></td>
+            <td>2026-03-26 08:45:17</td>
+          </tr>
+          <tr>
+            <td>003</td>
+            <td>ana.gomez</td>
+            <td><span class="badge-accion badge-update">CARGAR_DOCUMENTO</span></td>
+            <td>2026-03-26 09:02:55</td>
+          </tr>
+          <tr>
+            <td>004</td>
+            <td>admin</td>
+            <td><span class="badge-accion badge-delete">ELIMINAR_BORRADOR</span></td>
+            <td>2026-03-26 09:30:11</td>
+          </tr>
+          <tr>
+            <td>005</td>
+            <td>beimar.vega</td>
+            <td><span class="badge-accion badge-login">LOGIN</span></td>
+            <td>2026-03-26 10:00:00</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="worm-notice">
+        🔐 Los registros son inalterables. No se permite modificar ni eliminar entradas existentes.
+      </div>
+
+      <button class="btn-exportar">⬇ Exportar registros</button>
+    </div>
+  </main>
+
+  <footer>Proyecto Sistema de Créditos · Grupo 2 — Abygail &amp; Beimar</footer>
+
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HU-08 | Sincronización CORE bancario</title>
+  <style>
+    :root {
+      --morado-oscuro: #1A0D4B;
+      --magenta:       #C11262;
+      --lavanda:       #A93586;
+      --azul-marino:   #0F205D;
+      --blanco:        #FFFFFF;
+      --gris-oscuro:   #333333;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--morado-oscuro);
+      color: var(--blanco);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--azul-marino);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 3px solid var(--magenta);
+    }
+    header h1 { font-size: 20px; font-weight: 600; }
+    header span {
+      background: var(--magenta);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    main { padding: 32px; max-width: 860px; margin: 0 auto; }
+
+    .info-badge {
+      background: var(--azul-marino);
+      border-left: 4px solid var(--lavanda);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 20px;
+      margin-bottom: 28px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .info-badge strong { color: var(--blanco); }
+
+    .card {
+      background: var(--azul-marino);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(169,53,134,0.3);
+    }
+    .card h2 {
+      font-size: 16px;
+      color: var(--lavanda);
+      margin-bottom: 20px;
+    }
+
+    /* Estado de conexión */
+    .estado-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .estado-item {
+      background: rgba(26,13,75,0.5);
+      border-radius: 10px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .estado-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-verde  { background: #2ecc71; box-shadow: 0 0 8px #2ecc71; }
+    .dot-rojo   { background: #e74c3c; box-shadow: 0 0 8px #e74c3c; }
+    .dot-gris   { background: #aaa; }
+    .estado-info .titulo { font-size: 14px; font-weight: 600; }
+    .estado-info .sub    { font-size: 12px; color: #aaa; margin-top: 3px; }
+
+    /* Botón sincronizar */
+    .btn-sync {
+      width: 100%;
+      padding: 14px;
+      background: var(--magenta);
+      color: var(--blanco);
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-bottom: 20px;
+    }
+    .btn-sync:hover   { opacity: 0.85; }
+    .btn-sync:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Log de sincronización */
+    .log-box {
+      background: rgba(26,13,75,0.7);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid rgba(169,53,134,0.2);
+    }
+    .log-line { margin-bottom: 6px; }
+    .log-ok   { color: #2ecc71; }
+    .log-err  { color: #e74c3c; }
+    .log-info { color: #aaa; }
+
+    /* Payload JSON */
+    .json-preview {
+      background: rgba(26,13,75,0.7);
+      border-radius: 8px;
+      padding: 16px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #9bb3f5;
+      border: 1px solid rgba(169,53,134,0.2);
+      white-space: pre;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: rgba(255,255,255,0.3);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🏦 Sincronización CORE bancario</h1>
+    <span>HU-08 · Grupo 2 — Abygail &amp; Beimar</span>
+  </header>
+
+  <main>
+    <div class="info-badge">
+      <strong>Historia de usuario:</strong> Como sistema, quiero sincronizar datos con el CORE bancario vía API REST.<br>
+      <strong>Criterio de aceptación:</strong> Intercambio de datos JSON sin pérdida de integridad.
+    </div>
+
+    <!-- Estado de conexión -->
+    <div class="card">
+      <h2>📡 Estado de conexión</h2>
+      <div class="estado-grid">
+        <div class="estado-item">
+          <div class="estado-dot dot-verde"></div>
+          <div class="estado-info">
+            <div class="titulo">Sistema local</div>
+            <div class="sub">Conectado · localhost:3000</div>
+          </div>
+        </div>
+        <div class="estado-item">
+          <div class="estado-dot dot-gris" id="dot-core"></div>
+          <div class="estado-info">
+            <div class="titulo">CORE bancario</div>
+            <div class="sub" id="sub-core">En espera de sincronización</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-sync" id="btn-sync" onclick="simularSync()">
+        🔄 Sincronizar con CORE bancario
+      </button>
+
+      <!-- Log -->
+      <div class="log-box" id="log-box">
+        <div class="log-line log-info">[sistema] Listo para sincronizar...</div>
+      </div>
+    </div>
+
+    <!-- JSON payload -->
+    <div class="card">
+      <h2>📦 Payload JSON enviado al CORE</h2>
+      <div class="json-preview" id="json-preview">{
+  "timestamp": "—",
+  "origen": "sistema-creditos",
+  "datos": { }
+}</div>
+    </div>
+
+  </main>
+
+  <footer>Proyecto Sistema de Créditos · Grupo 2 — Abygail &amp; Beimar</footer>
+
+  <script>
+    function log(msg, tipo) {
+      const box = document.getElementById("log-box");
+      const div = document.createElement("div");
+      div.className = "log-line log-" + tipo;
+      const hora = new Date().toLocaleTimeString("es-BO");
+      div.textContent = "[" + hora + "] " + msg;
+      box.appendChild(div);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function simularSync() {
+      const btn  = document.getElementById("btn-sync");
+      const dot  = document.getElementById("dot-core");
+      const sub  = document.getElementById("sub-core");
+      const json = document.getElementById("json-preview");
+
+      btn.disabled = true;
+      btn.textContent = "⏳ Sincronizando...";
+      dot.className = "estado-dot dot-gris";
+      sub.textContent = "Conectando...";
+
+      const ts = new Date().toISOString();
+      json.textContent = JSON.stringify({
+        timestamp: ts,
+        origen: "sistema-creditos",
+        datos: { solicitudes: 12, monto_total: 85000, moneda: "BOB" }
+      }, null, 2);
+
+      log("Iniciando sincronización con CORE bancario...", "info");
+
+      setTimeout(() => {
+        log("Enviando payload JSON al CORE...", "info");
+      }, 800);
+
+      setTimeout(() => {
+        const exito = Math.random() > 0.2; // 80% éxito para demo
+        if (exito) {
+          dot.className = "estado-dot dot-verde";
+          sub.textContent = "Sincronizado · " + new Date().toLocaleTimeString("es-BO");
+          log("✓ Respuesta del CORE recibida: 200 OK", "ok");
+          log("✓ Datos sincronizados sin pérdida de integridad", "ok");
+          btn.textContent = "✅ Sincronizado";
+          btn.style.background = "#1a7a3a";
+        } else {
+          dot.className = "estado-dot dot-rojo";
+          sub.textContent = "Error de conexión";
+          log("✗ Error: CORE no respondió (timeout)", "err");
+          btn.textContent = "❌ Reintentar";
+          btn.style.background = "#8b0000";
+          btn.disabled = false;
+        }
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = "🔄 Sincronizar con CORE bancario";
+          btn.style.background = "";
+        }, 3000);
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
